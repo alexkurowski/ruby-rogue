@@ -12,10 +12,11 @@ This is a frivolous ruby version that uses [BearLibTerminal](http://foo.wyrd.nam
 Run this in your terminal:
 
 ```
-git clone https://github.com/mapisoft/roguelikedev-2017
-cd roguelikedev-2017
+git clone https://github.com/mapisoft/roguelikedev-does-the-complete-roguelike-tutorial roguelike-mapi
+cd roguelike-mapi
 ./main.rb
 ```
+
 
 ## Dependencies
 

@@ -2,6 +2,7 @@ module Game
 
   def self.play
     Display.open
+    World.init
 
     run_game_loop
 

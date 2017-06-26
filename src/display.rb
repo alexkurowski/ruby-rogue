@@ -7,8 +7,8 @@ module Display
 
 
   def self.open
-    @width  = 60
-    @height = 40
+    @width  = 80
+    @height = 25
 
     @title         = 'roguelike'
     @font          = 'teko'
@@ -28,6 +28,8 @@ module Display
     """
 
     update_font_size @font_size
+
+    Terminal.refresh
   end
 
 
@@ -38,8 +40,7 @@ module Display
 
   def self.render
     Terminal.clear
-    Terminal.put 3, 2, '@'.ord
-    Terminal.put_ext 2, 2, @cell_width, @cell_height, '@'.ord
+    Terminal.put World.player_x, World.player_y, '@'.ord
     Terminal.refresh
   end
 
@@ -77,8 +78,6 @@ module Display
 
     @cell_width  = Terminal.state Terminal::TK_CELL_WIDTH
     @cell_height = Terminal.state Terminal::TK_CELL_HEIGHT
-
-    render
   end
 
 

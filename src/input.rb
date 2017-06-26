@@ -13,11 +13,12 @@ module Input
     return unless Terminal.has_input?
 
     @key = Terminal.read
+    @chr = Terminal.state(TK_CHAR).chr
 
     return if @disabled
 
-    special_keys
-    interprete_action
+    special_actions
+    @action = interprete_chr || interprete_key
   end
 
 
@@ -25,7 +26,7 @@ module Input
   def self.disable; @disabled = true end
 
 
-  def self.special_keys
+  def self.special_actions
     case @key
     when TK_CLOSE,
          TK_ESCAPE
@@ -41,18 +42,35 @@ module Input
       width  = Terminal.state TK_WIDTH
       height = Terminal.state TK_HEIGHT
       Display.window_resize width, height
+
     end
   end
 
 
-  def self.interprete_action
-    @action = case @key
-      when TK_H then :go_west
-      when TK_J then :go_south
-      when TK_K then :go_north
-      when TK_L then :go_east
-      else nil
+  def self.interprete_chr
+    case @chr
+    when 'h' then :go_west
+    when 'j' then :go_south
+    when 'k' then :go_north
+    when 'l' then :go_east
+    else nil
     end
   end
+
+
+  def self.interprete_key
+    case @key
+    when TK_LEFT  then :go_west
+    when TK_DOWN  then :go_south
+    when TK_UP    then :go_north
+    when TK_RIGHT then :go_east
+    else nil
+    end
+  end
+
+
+  def self.shift?;   Terminal.state(TK_SHIFT)   == 1 end
+  def self.control?; Terminal.state(TK_CONTROL) == 1 end
+  def self.alt?;     Terminal.state(TK_ALT)     == 1 end
 
 end

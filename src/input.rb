@@ -1,28 +1,35 @@
 module Input
 
-
   include Terminal
 
 
-  mattr_accessor :disabled,
-                 :key,
-                 :action,
-                 :quit
+  global :action,
+         :quit
 
 
   def self.read
-    self.action = nil
+    @action = nil
 
     return unless Terminal.has_input?
 
-    self.key = Terminal.read
+    @key = Terminal.read
 
-    return if self.disabled
+    return if @disabled
 
-    case self.key
+    special_keys
+    interprete_action
+  end
+
+
+  def self.enable;  @disabled = false end
+  def self.disable; @disabled = true end
+
+
+  def self.special_keys
+    case @key
     when TK_CLOSE,
          TK_ESCAPE
-      self.quit = true
+      @quit = true
 
     when TK_KP_MINUS
       Display.decrease_font_size
@@ -35,17 +42,11 @@ module Input
       height = Terminal.state TK_HEIGHT
       Display.window_resize width, height
     end
-
-    self.interprete_action
   end
 
 
-  def self.enable;  self.disabled = false end
-  def self.disable; self.disabled = true end
-
-
   def self.interprete_action
-    self.action = case self.key
+    @action = case @key
       when TK_H then :go_west
       when TK_J then :go_south
       when TK_K then :go_north
@@ -53,4 +54,5 @@ module Input
       else nil
     end
   end
+
 end

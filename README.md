@@ -12,8 +12,8 @@ This is a frivolous ruby version that uses [BearLibTerminal](http://foo.wyrd.nam
 Run this in your terminal:
 
 ```
-git clone https://github.com/mapisoft/roguelikedev-does-the-complete-roguelike-tutorial roguelike-mapi
-cd roguelike-mapi
+git clone https://github.com/mapisoft/ruby-rogue
+cd ruby-rogue
 ./main.rb
 ```
 

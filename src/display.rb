@@ -41,7 +41,9 @@ module Display
 
   def self.render
     Terminal.clear
-    Terminal.put World.player_x, World.player_y, '@'.ord
+
+    World.render
+
     Terminal.refresh
   end
 

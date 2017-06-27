@@ -11,17 +11,29 @@ module Game
 
 
   def self.run_game_loop
-    loop do
-      Display.frame_start
+    until Input.quit
+
+      frame_start
 
       Input.read
       World.update
       Display.render
 
-      Display.frame_end
+      frame_end
 
-      break if Input.quit
     end
+  end
+
+
+  def self.frame_start
+    @frame_start_time = Time.now
+  end
+
+
+  def self.frame_end
+    elapsed = Time.now - @frame_start_time
+    time_to_sleep = 1 / 60 - elapsed
+    Terminal.delay time_to_sleep
   end
 
 end

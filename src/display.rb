@@ -15,7 +15,6 @@ module Display
     @font_size     = 12
     @max_font_size = 18
     @min_font_size = 8
-    @target_fps    = 1 / 60
 
     Terminal.open
 
@@ -42,18 +41,6 @@ module Display
     Terminal.clear
     Terminal.put World.player_x, World.player_y, '@'.ord
     Terminal.refresh
-  end
-
-
-  def self.frame_start
-    @frame_start_time = Time.now
-  end
-
-
-  def self.frame_end
-    elapsed = Time.now - @frame_start_time
-    time_to_sleep = @target_fps - elapsed
-    Terminal.delay time_to_sleep
   end
 
 

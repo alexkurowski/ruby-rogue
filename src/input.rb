@@ -59,6 +59,7 @@ module Input
 
 
   def self.interprete_key
+    # NOTE: might be better to convert @key into @chr, instead of running 'case' in two places?
     case @key
     when TK_LEFT  then :go_west
     when TK_DOWN  then :go_south

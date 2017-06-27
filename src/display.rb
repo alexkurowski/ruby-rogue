@@ -7,14 +7,16 @@ module Display
 
 
   def self.open
-    @width  = 80
-    @height = 25
+    opts = G.terminal_options
 
-    @title         = 'roguelike'
-    @font          = 'teko'
-    @font_size     = 12
-    @max_font_size = 18
-    @min_font_size = 8
+    @width  = opts.width
+    @height = opts.height
+
+    @title         = opts.title
+    @font_name     = opts.font_name
+    @font_size     = opts.font_size
+    @min_font_size = opts.min_font_size
+    @max_font_size = opts.max_font_size
 
     Terminal.open
 
@@ -61,7 +63,7 @@ module Display
   def self.update_font_size val
     @font_size = val
 
-    Terminal.set "font: #{ ROOT }/assets/#{ @font }.ttf, size=#{ @font_size }"
+    Terminal.set "font: #{ ROOT }/assets/#{ @font_name }.ttf, size=#{ @font_size }"
 
     @cell_width  = Terminal.state Terminal::TK_CELL_WIDTH
     @cell_height = Terminal.state Terminal::TK_CELL_HEIGHT

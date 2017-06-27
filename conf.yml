@@ -1,0 +1,13 @@
+terminal_options:
+  width: 80
+  height: 25
+  title: roguelike
+  font_name: teko
+  font_size: 12
+  min_font_size: 18
+  max_font_size: 18
+
+
+map_options:
+  width: 100
+  height: 100

@@ -4,13 +4,13 @@ module Game
     Display.open
     World.init
 
-    run_game_loop
+    main_game_loop
 
     Display.close
   end
 
 
-  def self.run_game_loop
+  def self.main_game_loop
     until Input.quit
 
       frame_start

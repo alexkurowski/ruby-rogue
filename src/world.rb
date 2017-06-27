@@ -19,6 +19,7 @@ module World
     @player_y += 1 if Input.action == :go_south
   end
 
+
   def self.render
     for i in 0...Display.width
       for j in 0...Display.height

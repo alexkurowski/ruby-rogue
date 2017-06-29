@@ -4,7 +4,7 @@ terminal_options:
   title: roguelike
   font_name: teko
   font_size: 12
-  min_font_size: 18
+  min_font_size: 8
   max_font_size: 18
 
 

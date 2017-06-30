@@ -55,4 +55,5 @@ module Entities
       end
     end
   end
+
 end

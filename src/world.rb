@@ -8,9 +8,11 @@ module World
     Map.generate
     Entities.init
 
-    Entities.add :position,
-                 :sprite,
-                 :player do |e|
+    Entities.add(
+      :position,
+      :sprite,
+      :player
+    ) do |e|
       e.position[:x] = Display.width  / 2
       e.position[:y] = Display.height / 2
       e.sprite[:char] = '@'
@@ -30,7 +32,10 @@ module World
       end
     end
 
-    Entities.filter_by_components(:position, :sprite).each do |e|
+    Entities.filter_by_components(
+      :position,
+      :sprite
+    ).each do |e|
       unless e.sprite.char.empty?
         Terminal.put e.position.x, e.position.y, e.sprite.char.ord
       end

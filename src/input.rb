@@ -7,6 +7,11 @@ module Input
          :quit
 
 
+  def self.init
+    @delay = 0
+  end
+
+
   def self.read
     @action = nil
 
@@ -15,9 +20,15 @@ module Input
     @key = Terminal.read
     @chr = Terminal.state(TK_CHAR).chr
 
+    special_actions
+
+    if @disabled
+      @delay -= 1
+      enable if @delay <= 0
+    end
+
     return if @disabled
 
-    special_actions
     @chr = convert_key
     @action = interprete_chr
   end
@@ -25,6 +36,12 @@ module Input
 
   def self.enable;  @disabled = false end
   def self.disable; @disabled = true end
+
+
+  def self.disable_for delay
+    @delay = delay
+    disable
+  end
 
 
   def self.special_actions

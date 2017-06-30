@@ -5,8 +5,8 @@ module World
 
 
   def self.init
-    Map.generate
     Entities.init
+    Map.generate
 
     Entities.prefab :player do |e|
       e.position[:x] = Display.width  / 2

@@ -1,6 +1,7 @@
 module Game
 
   def self.play
+    Input.init
     Display.open
     World.init
 

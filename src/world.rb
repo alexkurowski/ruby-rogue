@@ -8,11 +8,7 @@ module World
     Map.generate
     Entities.init
 
-    Entities.add(
-      :position,
-      :sprite,
-      :player
-    ) do |e|
+    Entities.prefab(:player) do |e|
       e.position[:x] = Display.width  / 2
       e.position[:y] = Display.height / 2
       e.sprite[:char] = '@'

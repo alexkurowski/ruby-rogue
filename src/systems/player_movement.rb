@@ -1,4 +1,6 @@
 def System.player_movement
+  return unless Input.action
+
   e = Entities.find_by_component :player
 
   case Input.action

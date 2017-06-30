@@ -22,3 +22,10 @@ map_options:
 
     wall:
       char: '#'
+
+
+entity_prefabs:
+  player:
+    - position
+    - sprite
+    - player

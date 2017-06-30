@@ -3,9 +3,7 @@ module Entities
   def self.init
     @entity_list = []
 
-    @prefabs = G.entity_prefabs.map do |k, v|
-      [k.to_sym, v.map(&:to_sym)]
-    end.to_h
+    build_prefabs
   end
 
 
@@ -62,6 +60,15 @@ module Entities
       components.all? do |component|
         e.include? component
       end
+    end
+  end
+
+
+  def self.build_prefabs
+    @prefabs = {}
+
+    G.entity_prefabs.each do |name, components|
+      @prefabs[name.to_sym] = components.map(&:to_sym)
     end
   end
 

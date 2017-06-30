@@ -8,16 +8,20 @@ module World
     Map.generate
     Entities.init
 
-    Entities.prefab(:player) do |e|
+    Entities.prefab :player do |e|
       e.position[:x] = Display.width  / 2
       e.position[:y] = Display.height / 2
       e.sprite[:char] = '@'
     end
+
+    @active_systems = [ :player_actions ]
   end
 
 
   def self.update
-    System.player_movement
+    @active_systems.each do |system|
+      System.send system
+    end
   end
 
 

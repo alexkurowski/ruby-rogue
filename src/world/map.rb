@@ -20,6 +20,21 @@ module Map
   end
 
 
+  def self.can_walk? x, y
+    @types[ @tiles[x][y] || 0 ].walk
+  end
+
+
+  def self.can_fly? x, y
+    @types[ @tiles[x][y] || 0 ].fly
+  end
+
+
+  def self.can_see? x, y
+    @types[ @tiles[x][y] || 0 ].see
+  end
+
+
   def self.define_tile_types tiles
     tiles.inject({}) do |types, (key, type)|
       types[key.to_sym] = {

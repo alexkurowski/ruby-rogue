@@ -15,12 +15,19 @@ def System.player_actions
   end
 end
 
+
 def move entity, dx, dy
   if can_move entity, dx, dy
     entity.position[:x] += dx
     entity.position[:y] += dy
+
+    entity.sprite[:dx] -= Display.cell_width * dx
+    entity.sprite[:dy] -= Display.cell_width * dy
+
+    Input.disable
   end
 end
+
 
 def can_move entity, dx, dy
   Map.can_walk? entity.position.x + dx, entity.position.y + dy

@@ -14,13 +14,16 @@ module World
       e.sprite[:char] = '@'
     end
 
-    @active_systems = [ :player_actions ]
+    @active_systems = [
+      :player_actions,
+      :sprite_movement
+    ]
   end
 
 
   def self.update
-    @active_systems.each do |system|
-      System.send system
+    @active_systems.each do |system_name|
+      System.send system_name
     end
   end
 
@@ -37,7 +40,13 @@ module World
       :sprite
     ).each do |e|
       unless e.sprite.char.empty?
-        Terminal.put e.position.x, e.position.y, e.sprite.char.ord
+        Terminal.put_ext(
+          e.position.x,
+          e.position.y,
+          e.sprite.dx,
+          e.sprite.dy,
+          e.sprite.char.ord
+        )
       end
     end
   end

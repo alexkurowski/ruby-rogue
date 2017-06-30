@@ -18,7 +18,8 @@ module Input
     return if @disabled
 
     special_actions
-    @action = interprete_chr || interprete_key
+    @chr = convert_key
+    @action = interprete_chr
   end
 
 
@@ -47,24 +48,35 @@ module Input
   end
 
 
+  def self.convert_key
+    case @key
+    when TK_LEFT  then 'h'
+    when TK_DOWN  then 'j'
+    when TK_UP    then 'k'
+    when TK_RIGHT then 'l'
+    when TK_KP_4  then 'h'
+    when TK_KP_2  then 'j'
+    when TK_KP_8  then 'k'
+    when TK_KP_6  then 'l'
+    when TK_KP_7  then 'y'
+    when TK_KP_9  then 'u'
+    when TK_KP_1  then 'b'
+    when TK_KP_3  then 'n'
+    else @chr
+    end
+  end
+
+
   def self.interprete_chr
     case @chr
     when 'h' then :go_west
     when 'j' then :go_south
     when 'k' then :go_north
     when 'l' then :go_east
-    else nil
-    end
-  end
-
-
-  def self.interprete_key
-    # NOTE: might be better to convert @key into @chr, instead of running 'case' in two places?
-    case @key
-    when TK_LEFT  then :go_west
-    when TK_DOWN  then :go_south
-    when TK_UP    then :go_north
-    when TK_RIGHT then :go_east
+    when 'y' then :go_north_west
+    when 'u' then :go_north_east
+    when 'b' then :go_south_west
+    when 'n' then :go_south_east
     else nil
     end
   end

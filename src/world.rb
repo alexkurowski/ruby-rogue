@@ -6,17 +6,20 @@ module World
 
   def self.init
     Map.generate
+    Entities.init
 
-    @player_x = Display.width  / 2
-    @player_y = Display.height / 2
+    Entities.add :position,
+                 :sprite,
+                 :player do |e|
+      e.position[:x] = Display.width  / 2
+      e.position[:y] = Display.height / 2
+      e.sprite[:char] = '@'
+    end
   end
 
 
   def self.update
-    @player_x -= 1 if Input.action == :go_west
-    @player_x += 1 if Input.action == :go_east
-    @player_y -= 1 if Input.action == :go_north
-    @player_y += 1 if Input.action == :go_south
+    System.player_movement
   end
 
 
@@ -27,7 +30,11 @@ module World
       end
     end
 
-    Terminal.put player_x, player_y, '@'.ord
+    Entities.filter_by_components(:position, :sprite).each do |e|
+      unless e.sprite.char.empty?
+        Terminal.put e.position.x, e.position.y, e.sprite.char.ord
+      end
+    end
   end
 
 end

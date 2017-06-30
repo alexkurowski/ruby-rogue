@@ -9,15 +9,17 @@ This is a frivolous ruby version that uses [BearLibTerminal](http://foo.wyrd.nam
 
 ## How to run
 
+Ensure you have ruby 2.4.1 or higher installed properly.
+
 Run this in your terminal:
 
 ```
 git clone https://github.com/mapisoft/ruby-rogue
 cd ruby-rogue
-./main.rb
+ruby main.rb
 ```
 
 
 ## Dependencies
 
-* ruby 2.0.0 or higher
+* ruby 2.4.1 or higher

@@ -36,12 +36,12 @@ module Camera
   end
 
 
-  def self.min_difference
+  internal def self.min_difference
     0.1
   end
 
 
-  def self.drag
+  internal def self.drag
     0.1
   end
 

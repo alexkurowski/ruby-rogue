@@ -50,4 +50,6 @@ class Module
 
   alias global mattr_accessor
 
+  alias internal private_class_method
+
 end

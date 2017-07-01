@@ -64,7 +64,7 @@ module Entities
   end
 
 
-  def self.build_prefabs
+  private_class_method def self.build_prefabs
     @prefabs = {}
 
     G.entity_prefabs.each do |name, components|

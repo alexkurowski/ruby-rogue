@@ -37,7 +37,7 @@ module World
   end
 
 
-  def self.render_tiles
+  internal def self.render_tiles
     Display.map do |i, j|
 
       cell_x = Camera.left_cell + i
@@ -54,7 +54,7 @@ module World
   end
 
 
-  def self.render_entities
+  internal def self.render_entities
     Entities.filter_by_components(
       :position,
       :sprite
@@ -73,7 +73,7 @@ module World
   end
 
 
-  def self.entity_is_on_screen? entity
+  internal def self.entity_is_on_screen? entity
     not entity.sprite.char.empty? &&
     entity.position.x >= Camera.left_cell &&
     entity.position.y >= Camera.top_cell &&

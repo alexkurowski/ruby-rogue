@@ -48,7 +48,7 @@ module Map
   end
 
 
-  def self.define_tile_types tiles
+  internal def self.define_tile_types tiles
     tiles.inject({}) do |types, (key, type)|
       types[key.to_sym] = {
         char:  type.char.ord,
@@ -62,7 +62,7 @@ module Map
   end
 
 
-  def self.define_tile_color color
+  internal def self.define_tile_color color
     r, g, b = 255, 255, 255
 
     if color.is_a? String

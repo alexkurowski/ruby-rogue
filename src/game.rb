@@ -26,12 +26,12 @@ module Game
   end
 
 
-  def self.frame_start
+  internal def self.frame_start
     @frame_start_time = Time.now
   end
 
 
-  def self.frame_end
+  internal def self.frame_end
     elapsed = Time.now - @frame_start_time
     time_to_sleep = 1.0 / 30 - elapsed
     Terminal.delay time_to_sleep

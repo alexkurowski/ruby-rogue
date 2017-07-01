@@ -67,16 +67,6 @@ module Display
   end
 
 
-  def self.update_font_size val
-    @font_size = val
-
-    Terminal.set "font: #{ ROOT }/assets/#{ @font_name }.ttf, size=#{ @font_size }"
-
-    @cell_width  = Terminal.state TK_CELL_WIDTH
-    @cell_height = Terminal.state TK_CELL_HEIGHT
-  end
-
-
   def self.window_resize width, height
     @width  = width
     @height = height
@@ -89,6 +79,16 @@ module Display
         yield i, j
       end
     end
+  end
+
+
+  internal def self.update_font_size val
+    @font_size = val
+
+    Terminal.set "font: #{ ROOT }/assets/#{ @font_name }.ttf, size=#{ @font_size }"
+
+    @cell_width  = Terminal.state TK_CELL_WIDTH
+    @cell_height = Terminal.state TK_CELL_HEIGHT
   end
 
 end

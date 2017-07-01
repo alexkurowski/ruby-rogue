@@ -44,7 +44,12 @@ module Input
   end
 
 
-  def self.special_actions
+  def self.shift?;   Terminal.state(TK_SHIFT)   == 1 end
+  def self.control?; Terminal.state(TK_CONTROL) == 1 end
+  def self.alt?;     Terminal.state(TK_ALT)     == 1 end
+
+
+  internal def self.special_actions
     case @key
     when TK_CLOSE,
          TK_ESCAPE
@@ -65,7 +70,7 @@ module Input
   end
 
 
-  def self.convert_key
+  internal def self.convert_key
     case @key
     when TK_LEFT  then 'h'
     when TK_DOWN  then 'j'
@@ -84,7 +89,7 @@ module Input
   end
 
 
-  def self.interprete_chr
+  internal def self.interprete_chr
     case @chr
     when 'h' then :go_west
     when 'j' then :go_south
@@ -97,10 +102,5 @@ module Input
     else nil
     end
   end
-
-
-  def self.shift?;   Terminal.state(TK_SHIFT)   == 1 end
-  def self.control?; Terminal.state(TK_CONTROL) == 1 end
-  def self.alt?;     Terminal.state(TK_ALT)     == 1 end
 
 end

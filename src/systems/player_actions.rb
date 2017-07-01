@@ -21,8 +21,8 @@ def move entity, dx, dy
     entity.position[:x] += dx
     entity.position[:y] += dy
 
-    entity.sprite[:dx] -= Display.cell_width * dx
-    entity.sprite[:dy] -= Display.cell_width * dy
+    entity.sprite[:dx] -= Display.cell_width  * dx
+    entity.sprite[:dy] -= Display.cell_height * dy
 
     Input.disable_for 1
   end

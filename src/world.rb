@@ -45,7 +45,7 @@ module World
 
       dx = cell_x * Display.cell_width  - Camera.dx
       dy = cell_y * Display.cell_height - Camera.dy
-      tile = Map.tile(cell_x, cell_y)
+      tile = Map.tile cell_x, cell_y
 
       Terminal.color tile.color.full
       Terminal.put_ext 0, 0, dx, dy, tile.char

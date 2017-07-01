@@ -82,4 +82,13 @@ module Display
     @height = height
   end
 
+
+  def self.map
+    for i in -1..width
+      for j in -1..height
+        yield i, j
+      end
+    end
+  end
+
 end

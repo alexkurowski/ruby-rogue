@@ -38,26 +38,17 @@ module World
 
 
   def self.render_tiles
-    for i in -1..Display.width
-      for j in -1..Display.height
+    Display.map do |i, j|
 
-        cell_x = Camera.left_cell + i
-        cell_y = Camera.top_cell  + j
+      cell_x = Camera.left_cell + i
+      cell_y = Camera.top_cell  + j
 
-        tile = Map.tile(cell_x, cell_y).char
+      dx = cell_x * Display.cell_width  - Camera.dx
+      dy = cell_y * Display.cell_height - Camera.dy
+      tile = Map.tile(cell_x, cell_y).char
 
-        x = cell_x * Display.cell_width  - Camera.dx
-        y = cell_y * Display.cell_height - Camera.dy
+      Terminal.put_ext 0, 0, dx, dy, tile
 
-        Terminal.put_ext(
-          0,
-          0,
-          x,
-          y,
-          tile
-        )
-
-      end
     end
   end
 
@@ -69,16 +60,11 @@ module World
     ).each do |entity|
       if entity_is_on_screen? entity
 
-        x = entity.position.x * Display.cell_width  - Camera.dx + entity.sprite.dx
-        y = entity.position.y * Display.cell_height - Camera.dy + entity.sprite.dy
+        dx = entity.position.x * Display.cell_width  - Camera.dx + entity.sprite.dx
+        dy = entity.position.y * Display.cell_height - Camera.dy + entity.sprite.dy
+        char = entity.sprite.char.ord
 
-        Terminal.put_ext(
-          0,
-          0,
-          x,
-          y,
-          entity.sprite.char.ord
-        )
+        Terminal.put_ext 0, 0, dx, dy, char
 
       end
     end

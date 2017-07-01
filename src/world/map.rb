@@ -12,6 +12,10 @@ module Map
 
     @types = define_tile_types opts.tile_types
     @tiles = Array.new(@width) { Array.new(@height) { :floor } }
+
+    for i in 0..1024
+      @tiles[( rand * @width ).floor][( rand * @height ).floor] = :wall
+    end
   end
 
 
@@ -24,8 +28,8 @@ module Map
 
 
   def self.out_of_bounds? x, y
-    x < 0 || x >= Map.width ||
-    y < 0 || y >= Map.height
+    x < 0 || x >= @width ||
+    y < 0 || y >= @height
   end
 
 
@@ -47,13 +51,28 @@ module Map
   def self.define_tile_types tiles
     tiles.inject({}) do |types, (key, type)|
       types[key.to_sym] = {
-        char: type.char.ord,
-        walk: type.can&.include?('walk'),
-        fly:  type.can&.include?('fly'),
-        see:  type.can&.include?('see')
+        char:  type.char.ord,
+        color: define_tile_color(type.color),
+        walk:  type.can&.include?('walk'),
+        fly:   type.can&.include?('fly'),
+        see:   type.can&.include?('see')
       }
       types
     end
+  end
+
+
+  def self.define_tile_color color
+    r, g, b = 255, 255, 255
+
+    if color.is_a? String
+      r, g, b = color.split(' ').map(&:to_i)
+    end
+
+    {
+      full: Terminal.color_from_argb(255, r, g, b),
+      half: Terminal.color_from_argb(120, r, g, b)
+    }
   end
 
 end

@@ -45,9 +45,10 @@ module World
 
       dx = cell_x * Display.cell_width  - Camera.dx
       dy = cell_y * Display.cell_height - Camera.dy
-      tile = Map.tile(cell_x, cell_y).char
+      tile = Map.tile(cell_x, cell_y)
 
-      Terminal.put_ext 0, 0, dx, dy, tile
+      Terminal.color tile.color.full
+      Terminal.put_ext 0, 0, dx, dy, tile.char
 
     end
   end
@@ -64,6 +65,7 @@ module World
         dy = entity.position.y * Display.cell_height - Camera.dy + entity.sprite.dy
         char = entity.sprite.char.ord
 
+        Terminal.color entity.sprite.color
         Terminal.put_ext 0, 0, dx, dy, char
 
       end

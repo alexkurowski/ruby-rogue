@@ -18,10 +18,12 @@ map_options:
 
     floor:
       char: '.'
+      color: 120 120 120
       can: walk fly see
 
     wall:
       char: '#'
+      color: 220 220 220
 
 
 entity_prefabs:

@@ -33,7 +33,7 @@ module Game
 
   def self.frame_end
     elapsed = Time.now - @frame_start_time
-    time_to_sleep = 1 / 60 - elapsed
+    time_to_sleep = 1.0 / 30 - elapsed
     Terminal.delay time_to_sleep
   end
 

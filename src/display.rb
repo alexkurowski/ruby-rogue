@@ -1,5 +1,8 @@
 module Display
 
+  include Terminal
+
+
   global :width,
          :height,
          :cell_width,
@@ -27,6 +30,8 @@ module Display
 
     input: filter=[keyboard, mouse, properties];
     """
+
+    Terminal.composition TK_ON
 
     update_font_size @font_size
 
@@ -67,8 +72,8 @@ module Display
 
     Terminal.set "font: #{ ROOT }/assets/#{ @font_name }.ttf, size=#{ @font_size }"
 
-    @cell_width  = Terminal.state Terminal::TK_CELL_WIDTH
-    @cell_height = Terminal.state Terminal::TK_CELL_HEIGHT
+    @cell_width  = Terminal.state TK_CELL_WIDTH
+    @cell_height = Terminal.state TK_CELL_HEIGHT
   end
 
 

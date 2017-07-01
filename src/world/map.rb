@@ -16,22 +16,31 @@ module Map
 
 
   def self.tile x, y
-    @types[ @tiles[x][y] || 0 ]
+    if out_of_bounds? x, y
+    then @types[:empty]
+    else @types[ @tiles[x][y] ]
+    end
+  end
+
+
+  def self.out_of_bounds? x, y
+    x < 0 || x >= Map.width ||
+    y < 0 || y >= Map.height
   end
 
 
   def self.can_walk? x, y
-    @types[ @tiles[x][y] || 0 ].walk
+    tile(x, y).walk
   end
 
 
   def self.can_fly? x, y
-    @types[ @tiles[x][y] || 0 ].fly
+    tile(x, y).fly
   end
 
 
   def self.can_see? x, y
-    @types[ @tiles[x][y] || 0 ].see
+    tile(x, y).see
   end
 
 

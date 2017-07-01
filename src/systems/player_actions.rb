@@ -24,7 +24,7 @@ def move entity, dx, dy
     entity.sprite[:dx] -= Display.cell_width * dx
     entity.sprite[:dy] -= Display.cell_width * dy
 
-    Input.disable_for 2
+    Input.disable_for 1
   end
 end
 

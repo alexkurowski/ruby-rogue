@@ -21,9 +21,29 @@ map_options:
       color: 120 120 120
       can: walk fly see
 
-    wall:
-      char: '#'
-      color: 220 220 220
+    wall_horizontal:
+      char: '═'
+      color: 190 170 140
+
+    wall_vertical:
+      char: '║'
+      color: 190 170 140
+
+    wall_corner_nw:
+      char: '╔'
+      color: 190 170 140
+
+    wall_corner_ne:
+      char: '╗'
+      color: 190 170 140
+
+    wall_corner_sw:
+      char: '╚'
+      color: 190 170 140
+
+    wall_corner_se:
+      char: '╝'
+      color: 190 170 140
 
 
 entity_prefabs:

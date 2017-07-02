@@ -11,11 +11,9 @@ module Map
     @height = opts.height
 
     @types = define_tile_types opts.tile_types
-    @tiles = Array.new(@width) { Array.new(@height) { :floor } }
+    @tiles = Array.new(@width) { Array.new(@height) { :empty } }
 
-    for i in 0..1024
-      @tiles[( rand * @width ).floor][( rand * @height ).floor] = :wall
-    end
+    generate_map
   end
 
 
@@ -24,12 +22,6 @@ module Map
     then @types[:empty]
     else @types[ @tiles[x][y] ]
     end
-  end
-
-
-  def self.out_of_bounds? x, y
-    x < 0 || x >= @width ||
-    y < 0 || y >= @height
   end
 
 
@@ -45,6 +37,12 @@ module Map
 
   def self.can_see? x, y
     tile(x, y).see
+  end
+
+
+  internal def self.out_of_bounds? x, y
+    x < 0 || x >= @width ||
+    y < 0 || y >= @height
   end
 
 
@@ -73,6 +71,39 @@ module Map
       full: Terminal.color_from_argb(255, r, g, b),
       half: Terminal.color_from_argb(120, r, g, b)
     }
+  end
+
+
+  internal def self.generate_map
+    generate_room 30, 10, 20, 12
+  end
+
+
+  internal def self.generate_room x, y, w, h
+    w += 1
+    h += 1
+
+    for i in (x) .. (x + w)
+      for j in (y) .. (y + h)
+        if i == x or i == x + w
+          put_tile i, j, :wall_vertical
+        elsif j == y or j == y + h
+          put_tile i, j, :wall_horizontal
+        else
+          put_tile i, j, :floor
+        end
+      end
+    end
+
+    put_tile x,     y,     :wall_corner_nw
+    put_tile x + w, y,     :wall_corner_ne
+    put_tile x,     y + h, :wall_corner_sw
+    put_tile x + w, y + h, :wall_corner_se
+  end
+
+
+  internal def self.put_tile x, y, tile
+    @tiles[x][y] = tile
   end
 
 end

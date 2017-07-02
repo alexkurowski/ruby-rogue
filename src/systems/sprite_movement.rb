@@ -27,5 +27,5 @@ end
 
 
 def drag
-  0.8
+  0.6
 end

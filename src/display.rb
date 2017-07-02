@@ -16,8 +16,10 @@ module Display
     @height = opts.height
 
     @title         = opts.title
+    @mode          = opts.mode
+    @tile_name     = opts.tile_name
+    @tile_size     = opts.tile_size
     @font_name     = opts.font_name
-    @font_type     = opts.font_type
     @font_size     = opts.font_size
     @min_font_size = opts.min_font_size
     @max_font_size = opts.max_font_size
@@ -86,10 +88,10 @@ module Display
   internal def self.update_font_size val
     @font_size = val
 
-    if @font_type == 'ttf'
+    if @mode == 'font'
       Terminal.set "font: #{ ROOT }/assets/#{ @font_name }.ttf, size=#{ @font_size }"
     else
-      Terminal.set "font: #{ ROOT }/assets/#{ @font_name }.#{ @font_type }, size=#{ @font_size }x#{ @font_size }, codepage=437"
+      Terminal.set "font: #{ ROOT }/assets/#{ @tile_name }.png, size=#{ @tile_size }x#{ @tile_size }, codepage=437"
     end
 
     Camera.set_dirty

@@ -27,5 +27,8 @@ end
 
 
 def drag
-  0.6
+  if Display.big?
+  then 0
+  else 0.6
+  end
 end

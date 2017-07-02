@@ -1,12 +1,13 @@
 module Camera
 
-  global :left_cell,
-         :top_cell,
+  global :x,
+         :y,
          :dx,
          :dy
 
 
   def self.init
+    @dirty       = true
     @offset      = { x: 0, y: 0 }
     @target_cell = { x: 0, y: 0 }
     @target      = { x: 0, y: 0 }
@@ -16,19 +17,11 @@ module Camera
   def self.update
     entity = Entities.find_by_component :player
 
-    distance = Math.sqrt ( entity.position.x - @target_cell.x ) *
-                         ( entity.position.x - @target_cell.x ) +
-                         ( entity.position.y - @target_cell.y ) *
-                         ( entity.position.y - @target_cell.y )
-    moving = entity.sprite.dx.abs > 1 || entity.sprite.dy.abs > 1
+    @target[:x] = entity.position.x - Display.width  * 0.5
+    @target[:y] = entity.position.y - Display.height * 0.5
 
-    if distance > max_target_distance or not moving
-      @target_cell[:x] = entity.position.x
-      @target_cell[:y] = entity.position.y
-    end
-
-    @target[:x] = @target_cell.x * Display.cell_width  - Display.width  * Display.cell_width  * 0.5
-    @target[:y] = @target_cell.y * Display.cell_height - Display.height * Display.cell_height * 0.5
+    old_offset_x = @offset.x
+    old_offset_y = @offset.y
 
     @offset[:x] += (@target.x - @offset.x) * drag
     @offset[:y] += (@target.y - @offset.y) * drag
@@ -41,10 +34,25 @@ module Camera
       @offset[:y] = @target.y
     end
 
-    @left_cell = ( @offset.x / Display.cell_width  ).round
-    @top_cell  = ( @offset.y / Display.cell_height ).round
-    @dx = @offset.x + Display.cell_width  * 0.5
-    @dy = @offset.y + Display.cell_height * 0.5
+    @dirty = @force_dirty ||
+             @offset.x != old_offset_x ||
+             @offset.y != old_offset_y
+    @force_dirty = false
+
+    @x  = @target.x.floor
+    @y  = @target.y.floor
+    @dx = ( @offset.x - @target.x ) * Display.cell_width  + Display.cell_width  * 0.5
+    @dy = ( @offset.y - @target.y ) * Display.cell_height + Display.cell_height * 0.5
+  end
+
+
+  def self.set_dirty
+    @force_dirty = true
+  end
+
+
+  def self.dirty?
+    @dirty
   end
 
 
@@ -59,7 +67,10 @@ module Camera
 
 
   internal def self.drag
-    0.1
+    if Display.big?
+    then 1
+    else 0.1
+    end
   end
 
 end

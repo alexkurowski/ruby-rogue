@@ -17,6 +17,7 @@ module Display
 
     @title         = opts.title
     @font_name     = opts.font_name
+    @font_type     = opts.font_type
     @font_size     = opts.font_size
     @min_font_size = opts.min_font_size
     @max_font_size = opts.max_font_size
@@ -31,8 +32,6 @@ module Display
     input: filter=[keyboard, mouse, properties];
     """
 
-    Terminal.composition TK_ON
-
     update_font_size @font_size
 
     Terminal.refresh
@@ -45,10 +44,7 @@ module Display
 
 
   def self.render
-    Terminal.clear
-
     World.render
-
     Terminal.refresh
   end
 
@@ -74,18 +70,29 @@ module Display
 
 
   def self.map
-    for i in -1..width
-      for j in -1..height
+    for i in 0...width
+      for j in 0...height
         yield i, j
       end
     end
   end
 
 
+  def self.big?
+    width * height > 3000
+  end
+
+
   internal def self.update_font_size val
     @font_size = val
 
-    Terminal.set "font: #{ ROOT }/assets/#{ @font_name }.ttf, size=#{ @font_size }"
+    if @font_type == 'ttf'
+      Terminal.set "font: #{ ROOT }/assets/#{ @font_name }.ttf, size=#{ @font_size }"
+    else
+      Terminal.set "font: #{ ROOT }/assets/#{ @font_name }.#{ @font_type }, size=#{ @font_size }x#{ @font_size }, codepage=437"
+    end
+
+    Camera.set_dirty
 
     @cell_width  = Terminal.state TK_CELL_WIDTH
     @cell_height = Terminal.state TK_CELL_HEIGHT

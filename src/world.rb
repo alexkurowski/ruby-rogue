@@ -38,17 +38,18 @@ module World
 
 
   internal def self.render_tiles
+    return unless Camera.dirty?
+
     Display.map do |i, j|
 
-      cell_x = Camera.left_cell + i
-      cell_y = Camera.top_cell  + j
-
-      dx = cell_x * Display.cell_width  - Camera.dx
-      dy = cell_y * Display.cell_height - Camera.dy
-      tile = Map.tile cell_x, cell_y
+      x    = Camera.x + i
+      y    = Camera.y + j
+      dx   = -Camera.dx
+      dy   = -Camera.dy
+      tile = Map.tile x, y
 
       Terminal.color tile.color.full
-      Terminal.put_ext 0, 0, dx, dy, tile.char
+      Terminal.put_ext i, j, dx, dy, tile.char
 
     end
   end
@@ -61,12 +62,14 @@ module World
     ).each do |entity|
       if entity_is_on_screen? entity
 
-        dx = entity.position.x * Display.cell_width  - Camera.dx + entity.sprite.dx
-        dy = entity.position.y * Display.cell_height - Camera.dy + entity.sprite.dy
+        x    = entity.position.x - Camera.x
+        y    = entity.position.y - Camera.y
+        dx   = entity.sprite.dx - Camera.dx
+        dy   = entity.sprite.dy - Camera.dy
         char = entity.sprite.char.ord
 
         Terminal.color entity.sprite.color
-        Terminal.put_ext 0, 0, dx, dy, char
+        Terminal.put_ext x, y, dx, dy, char
 
       end
     end
@@ -75,10 +78,10 @@ module World
 
   internal def self.entity_is_on_screen? entity
     not entity.sprite.char.empty? &&
-    entity.position.x >= Camera.left_cell &&
-    entity.position.y >= Camera.top_cell &&
-    entity.position.x < Camera.left_cell + Display.width &&
-    entity.position.y < Camera.top_cell  + Display.height
+    entity.position.x >= Camera.x &&
+    entity.position.y >= Camera.y &&
+    entity.position.x < Camera.x + Display.width &&
+    entity.position.y < Camera.y + Display.height
   end
 
 end

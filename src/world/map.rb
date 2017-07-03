@@ -12,14 +12,7 @@ module Map
 
     define_tile_types TILES.tile_types
 
-    tiles  = Generator.generate @width, @height
-    @tiles = Array.new(@width) { Array.new(@height) { nil } }
-
-    for x in 0...@width
-      for y in 0...@height
-        set_tile x, y, tiles[x][y]
-      end
-    end
+    generate_tiles
   end
 
 
@@ -125,4 +118,21 @@ module Map
     end
   end
 
+
+  internal def self.generate_tiles
+    tiles = Generator::Island.generate @width, @height
+    tiles = Generator::Facility.generate tiles, @width, @height
+
+    @tiles = Array.new(@width) { Array.new(@height) { :empty_0 } }
+
+    for x in 0...@width
+      for y in 0...@height
+        set_tile x, y, tiles[x][y]
+      end
+    end
+  end
+
 end
+
+
+module Map::Generator; end

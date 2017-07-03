@@ -1,8 +1,9 @@
 module Map::Generator::Facility
 
-  def self.generate width, height, tiles
+  def self.generate tiles, width, height, level = 0
     @width  = width
     @height = height
+    @level  = level
 
     @tiles  = Array.new(width) { |i|  Array.new(height) { |j| tiles[i][j] } }
 
@@ -206,7 +207,8 @@ module Map::Generator::Facility
         dx = -1
       end
 
-      if true or inside_node? @root, drunkard.x + dx, drunkard.y + dy
+      if @level == 0 or
+         inside_node? @root, drunkard.x + dx, drunkard.y + dy
         drunkard[:x] += dx
         drunkard[:y] += dy
         @tiles[drunkard.x][drunkard.y] = :floor

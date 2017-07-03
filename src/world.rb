@@ -14,7 +14,7 @@ module World
       e.position[:y] = @player_y
       e.sprite[:char] = '@'
 
-      Camera.jump_to e.position.x, e.position.y - 100
+      Camera.jump_to e.position.x, e.position.y - 10
     end
 
     @active_systems = [

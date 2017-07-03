@@ -18,33 +18,14 @@ module Map::Generator::Facility
                     @height * 0.5 - @facility_size,
                     @facility_size * 2,
                     @facility_size * 2
-    nodes  = [root]
     @rooms = []
 
-    fill_walls root
-
-    split = true
-    while split
-      split = false
-      nodes.each do |node|
-        if node.child1.nil? and node.child2.nil?
-          if node.w > @node_max_size or
-             node.h > @node_max_size or
-             rand > 0.8
-            if split_node node
-              nodes << node.child1
-              nodes << node.child2
-              split = true
-            end
-          end
-        end
-      end
-    end
-
+    fill_with_walls root
+    split_nodes root
     create_rooms root
     clean_up
     find_entrance
-    fix_walls
+    fix_wall_tiles
 
     return @tiles
   end
@@ -70,6 +51,29 @@ module Map::Generator::Facility
       x2: ( x + w ).floor,
       y2: ( y + h ).floor
     }
+  end
+
+
+  internal def self.split_nodes root
+    nodes = [root]
+
+    split = true
+    while split
+      split = false
+      nodes.each do |node|
+        if node.child1.nil? and node.child2.nil?
+          if node.w > @node_max_size or
+             node.h > @node_max_size or
+             rand > 0.8
+            if split_node node
+              nodes << node.child1
+              nodes << node.child2
+              split = true
+            end
+          end
+        end
+      end
+    end
   end
 
 
@@ -112,7 +116,7 @@ module Map::Generator::Facility
   end
 
 
-  internal def self.fill_walls node
+  internal def self.fill_with_walls node
     x1 = node.x.floor
     x2 = ( node.x + node.w ).floor
     y1 = node.y.floor
@@ -306,7 +310,7 @@ module Map::Generator::Facility
   end
 
 
-  internal def self.fix_walls
+  internal def self.fix_wall_tiles
     tiles = Array.new(@width) { |i| Array.new(@height) { |j| @tiles[i][j] } }
 
     for i in 1...@width - 1

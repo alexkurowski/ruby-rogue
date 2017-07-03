@@ -10,7 +10,7 @@ module Display
 
 
   def self.open
-    opts = G.terminal_options
+    opts = CONF.terminal_options
 
     @width  = opts.width
     @height = opts.height

@@ -1,0 +1,5 @@
+entity_prefabs:
+  player:
+    - position
+    - sprite
+    - player

@@ -67,7 +67,7 @@ module Entities
   private_class_method def self.build_prefabs
     @prefabs = {}
 
-    G.entity_prefabs.each do |name, components|
+    PREFABS.entity_prefabs.each do |name, components|
       @prefabs[name.to_sym] = components.map(&:to_sym)
     end
   end

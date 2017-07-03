@@ -5,12 +5,12 @@ module Map
 
 
   def self.generate
-    opts = G.map_options
+    opts = CONF.map_options
 
     @width  = opts.width
     @height = opts.height
 
-    @types = define_tile_types opts.tile_types
+    @types = define_tile_types TILES.tile_types
     @tiles = Generator.generate @width, @height
   end
 

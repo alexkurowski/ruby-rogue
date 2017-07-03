@@ -206,7 +206,7 @@ module Map::Generator::Facility
         dx = -1
       end
 
-      if inside_node? @root, drunkard.x + dx, drunkard.y + dy
+      if true or inside_node? @root, drunkard.x + dx, drunkard.y + dy
         drunkard[:x] += dx
         drunkard[:y] += dy
         @tiles[drunkard.x][drunkard.y] = :floor

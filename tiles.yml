@@ -39,7 +39,8 @@ tile_types:
       - '"'
       - "'"
       - '.'
-      - ','
+      - '⌠'
+      - '√'
     color:
       - 120 180  10
       -  10 140  10
@@ -49,8 +50,7 @@ tile_types:
 
   floor:
     char:
-      - '.'
-      - ','
+      - '•'
     color:
       - 140 140 140
       - 120 120 120
@@ -60,7 +60,9 @@ tile_types:
 
   wall:
     char: '╬'
-    color: *wall_colors
+    color:
+      - 190 170 140
+      - 220 210 190
 
   wall_w:
     char: '╡'

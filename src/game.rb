@@ -42,7 +42,7 @@ module Game
 
     return unless @print_bad_fps
     if time_to_sleep <= 0
-      puts "! #{ fps_target / elapsed / fps_target } fps"
+      puts "FPS: #{ ( fps_target / elapsed / fps_target ).floor } / #{ fps_target }"
     end
   end
 

@@ -1,56 +1,61 @@
 module Map::Generator
 
   def self.generate width, height
-    @width  = width
-    @height = height
+    tiles = Island.generate width, height
+    tiles = Facility.generate width, height, tiles
 
-    @island_size = @width * 0.2
+    tiles = fix_walls width, height, tiles
 
-    seed         = Time.now.to_i % 1000
-    persistence  = 0.3
-    octaves      = 16
-    @noise = Perlin::Generator.new seed, persistence, octaves
-
-    @tiles = Array.new(width) { Array.new(height) { :empty } }
-
-    generate_island
-    # generate_facility
-    # clean_up
-
-    World.player_x = 20
-    World.player_y = 20
-
-    @tiles
+    tiles
   end
 
 
-  def self.generate_island
-    chunk = @noise.chunk 0, 0, @width, @height, 0.05
+  internal def self.fix_walls width, height, original_tiles
+    tiles = Array.new(width) { |i|  Array.new(height) { |j| original_tiles[i][j] } }
 
-    for i in 0...@width
-      for j in 0...@height
-        @tiles[i][j] = island_tile chunk[i][j], i, j
+    for i in 1...width - 1
+      for j in 1...height - 1
+
+        next unless original_tiles[i][j] == :wall
+
+        north = original_tiles[i][j - 1] == :wall
+        south = original_tiles[i][j + 1] == :wall
+        east  = original_tiles[i + 1][j] == :wall
+        west  = original_tiles[i - 1][j] == :wall
+
+        next if north and south and east and west
+
+        new_tile =
+        if north and east and south
+          :wall_triangle_nes
+        elsif north and west and south
+          :wall_triangle_nws
+        elsif east and south and west
+          :wall_triangle_wse
+        elsif east and north and west
+          :wall_triangle_wne
+        elsif north and west
+          :wall_corner_nw
+        elsif north and east
+          :wall_corner_ne
+        elsif south and west
+          :wall_corner_sw
+        elsif south and east
+          :wall_corner_se
+        elsif west and east
+          :wall_horizontal
+        elsif north and south
+          :wall_vertical
+        else
+          :wall
+        end
+
+        tiles[i][j] = new_tile
+
       end
     end
-  end
 
-  def self.island_tile noise, x, y
-    cx       = ( @width  * 0.5 - x ).abs
-    cy       = ( @height * 0.5 - y ).abs
-    mask     = [cx, cy].max # square mask
-    delta    = mask / @island_size * 0.5
-    gradient = delta * delta
-
-    noise = ( noise + 1 ) / 2
-    noise *= [0, 1.25 - gradient].max
-
-    if noise < 0.1
-      :water
-    elsif noise < 0.15
-      :sand
-    else
-      :grass
-    end
+    tiles
   end
 
 end

@@ -49,7 +49,7 @@ module Map
       types[key.to_sym] = {
         char:  type.char.ord,
         color: define_tile_color(type.color),
-        walk:  type.can&.include?('walk') || true,
+        walk:  type.can&.include?('walk'),
         fly:   type.can&.include?('fly'),
         see:   type.can&.include?('see')
       }

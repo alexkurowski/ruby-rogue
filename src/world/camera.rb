@@ -46,6 +46,12 @@ module Camera
   end
 
 
+  def self.jump_to x, y
+    @offset[:x] = @target[:x] = x - Display.width  * 0.5
+    @offset[:y] = @target[:y] = y - Display.height * 0.5
+  end
+
+
   def self.set_dirty
     @force_dirty = true
   end

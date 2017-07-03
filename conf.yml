@@ -12,8 +12,8 @@ terminal_options:
 
 
 map_options:
-  width: 120
-  height: 120
+  width: 256
+  height: 256
 
   tile_types:
     empty:
@@ -41,6 +41,7 @@ map_options:
 
     wall:
       char: '╬'
+      color: 190 170 140
 
     wall_horizontal:
       char: '═'
@@ -50,35 +51,35 @@ map_options:
       char: '║'
       color: 190 170 140
 
-    wall_corner_nw:
+    wall_corner_ne:
       char: '╚'
       color: 190 170 140
 
-    wall_corner_ne:
+    wall_corner_nw:
       char: '╝'
       color: 190 170 140
 
-    wall_corner_sw:
+    wall_corner_se:
       char: '╔'
       color: 190 170 140
 
-    wall_corner_se:
+    wall_corner_sw:
       char: '╗'
       color: 190 170 140
 
-    wall_triangle_nws:
+    wall_triangle_nes:
       char: '╠'
       color: 190 170 140
 
-    wall_triangle_nes:
+    wall_triangle_nws:
       char: '╣'
       color: 190 170 140
 
-    wall_triangle_esw:
+    wall_triangle_wse:
       char: '╦'
       color: 190 170 140
 
-    wall_triangle_enw:
+    wall_triangle_wne:
       char: '╩'
       color: 190 170 140
 

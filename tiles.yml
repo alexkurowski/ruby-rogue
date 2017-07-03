@@ -1,68 +1,101 @@
+wall_colors: &wall_colors
+  - 190 170 140
+  - 190 170 140
+  - 190 170 140
+  - 220 210 190
+  -  10 140  10
+
+
 tile_types:
   empty:
     char: ' '
 
   water:
-    char: '~'
-    color: 40 80 200
+    char:
+      - '~'
+      - '≈'
+      - '='
+    color:
+      -  40  80 200
+      -  80 120 220
+      -  10 110 200
+      -  30 120 180
     can: see
 
   sand:
-    char: '.'
-    color: 240 220 0
+    char:
+      - '.'
+      - ','
+    color:
+      - 200 210  60
+      - 160 150  20
+      - 190 180  30
     can: walk fly see
 
   grass:
-    char: '"'
-    color: 120 180 10
+    char:
+      - '"'
+      - "'"
+      - '.'
+      - ','
+    color:
+      - 120 180  10
+      -  10 140  10
+      -  90 140  70
+      -  60 120  40
     can: walk fly see
 
   floor:
-    char: '.'
-    color: 120 120 120
+    char:
+      - '.'
+      - ','
+    color:
+      - 140 140 140
+      - 120 120 120
+      - 100 100 100
+      -  90  90  90
     can: walk fly see
 
   wall:
     char: '╬'
-    color: 190 170 140
+    color: *wall_colors
 
-  wall_horizontal:
+  wall_we:
     char: '═'
-    color: 190 170 140
+    color: *wall_colors
 
-  wall_vertical:
+  wall_ns:
     char: '║'
-    color: 190 170 140
+    color: *wall_colors
 
-  wall_corner_ne:
+  wall_ne:
     char: '╚'
-    color: 190 170 140
+    color: *wall_colors
 
-  wall_corner_nw:
+  wall_nw:
     char: '╝'
-    color: 190 170 140
+    color: *wall_colors
 
-  wall_corner_se:
+  wall_se:
     char: '╔'
-    color: 190 170 140
+    color: *wall_colors
 
-  wall_corner_sw:
+  wall_sw:
     char: '╗'
-    color: 190 170 140
+    color: *wall_colors
 
-  wall_triangle_nes:
+  wall_nes:
     char: '╠'
-    color: 190 170 140
+    color: *wall_colors
 
-  wall_triangle_nws:
+  wall_nws:
     char: '╣'
-    color: 190 170 140
+    color: *wall_colors
 
-  wall_triangle_wse:
+  wall_wse:
     char: '╦'
-    color: 190 170 140
+    color: *wall_colors
 
-  wall_triangle_wne:
+  wall_wne:
     char: '╩'
-    color: 190 170 140
-
+    color: *wall_colors

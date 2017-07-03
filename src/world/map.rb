@@ -10,14 +10,28 @@ module Map
     @width  = opts.width
     @height = opts.height
 
-    @types = define_tile_types TILES.tile_types
-    @tiles = Generator.generate @width, @height
+    define_tile_types TILES.tile_types
+
+    tiles  = Generator.generate @width, @height
+    @tiles = Array.new(@width) { Array.new(@height) { nil } }
+
+    for x in 0...@width
+      for y in 0...@height
+        set_tile x, y, tiles[x][y]
+      end
+    end
+  end
+
+
+  def self.set_tile x, y, type
+    variant = @types[type].sample
+    @tiles[x][y] = variant
   end
 
 
   def self.tile x, y
     if out_of_bounds? x, y
-    then @types[:empty]
+    then @types[:empty_0]
     else @types[ @tiles[x][y] ]
     end
   end
@@ -45,15 +59,40 @@ module Map
 
 
   internal def self.define_tile_types tiles
-    tiles.inject({}) do |types, (key, type)|
-      types[key.to_sym] = {
-        char:  type.char.ord,
-        color: define_tile_color(type.color),
+    default_color = '255 255 255'
+
+    @types = {}
+
+    tiles.each do |key, type|
+
+      key    = key.to_sym
+      chars  = [ type.char ].flatten
+      colors = define_tile_colors type.color || default_color
+      can = {
         walk:  type.can&.include?('walk'),
         fly:   type.can&.include?('fly'),
         see:   type.can&.include?('see')
       }
-      types
+      count = 0
+      @types[key] = []
+
+      chars.each do |char|
+        colors.each do |color|
+          variant = "#{ key }_#{ count }".to_sym
+
+          @types[key] << variant
+          @types[variant] = {
+            char:  char.ord,
+            color: color,
+            walk:  can.walk,
+            fly:   can.fly,
+            see:   can.see
+          }
+
+          count += 1
+        end
+      end
+
     end
   end
 
@@ -69,6 +108,21 @@ module Map
       full: Terminal.color_from_argb(255, r, g, b),
       half: Terminal.color_from_argb(120, r, g, b)
     }
+  end
+
+  internal def self.define_tile_colors colors
+    [ colors ].flatten.inject([]) do |result, color|
+      r, g, b = 255, 255, 255
+
+      if color.is_a? String
+        r, g, b = color.split(' ').map(&:to_i)
+      end
+
+      result << {
+        full: Terminal.color_from_argb(255, r, g, b),
+        half: Terminal.color_from_argb(120, r, g, b)
+      }
+    end
   end
 
 end

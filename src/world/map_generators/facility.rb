@@ -342,25 +342,25 @@ module Map::Generator::Facility
 
         new_tile =
         if north and east and south
-          :wall_triangle_nes
+          :wall_nes
         elsif north and west and south
-          :wall_triangle_nws
+          :wall_nws
         elsif east and south and west
-          :wall_triangle_wse
+          :wall_wse
         elsif east and north and west
-          :wall_triangle_wne
+          :wall_wne
         elsif north and west
-          :wall_corner_nw
+          :wall_nw
         elsif north and east
-          :wall_corner_ne
+          :wall_ne
         elsif south and west
-          :wall_corner_sw
+          :wall_sw
         elsif south and east
-          :wall_corner_se
+          :wall_se
         elsif west or east
-          :wall_horizontal
+          :wall_we
         elsif north or south
-          :wall_vertical
+          :wall_ns
         else
           :wall
         end

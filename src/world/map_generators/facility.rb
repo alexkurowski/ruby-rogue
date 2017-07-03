@@ -357,10 +357,18 @@ module Map::Generator::Facility
           :wall_sw
         elsif south and east
           :wall_se
-        elsif west or east
+        elsif west and east
           :wall_we
-        elsif north or south
+        elsif north and south
           :wall_ns
+        elsif north
+          :wall_n
+        elsif south
+          :wall_s
+        elsif east
+          :wall_e
+        elsif west
+          :wall_w
         else
           :wall
         end

@@ -60,6 +60,22 @@ tile_types:
     char: '╬'
     color: *wall_colors
 
+  wall_w:
+    char: '╡'
+    color: *wall_colors
+
+  wall_e:
+    char: '╞'
+    color: *wall_colors
+
+  wall_n:
+    char: '╨'
+    color: *wall_colors
+
+  wall_s:
+    char: '╥'
+    color: *wall_colors
+
   wall_we:
     char: '═'
     color: *wall_colors

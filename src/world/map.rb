@@ -4,7 +4,7 @@ module Map
          :height
 
 
-  def self.generate
+  def self.init
     opts = CONF.map_options
 
     @width  = opts.width
@@ -12,7 +12,7 @@ module Map
 
     define_tile_types TILES.tile_types
 
-    generate_tiles
+    generate
   end
 
 
@@ -119,9 +119,9 @@ module Map
   end
 
 
-  internal def self.generate_tiles
-    tiles = Generator::Island.generate @width, @height
-    tiles = Generator::Facility.generate tiles, @width, @height
+  internal def self.generate
+    tiles = Generator::Island.generate
+    tiles = Generator::Facility.generate tiles
 
     @tiles = Array.new(@width) { Array.new(@height) { :empty_0 } }
 

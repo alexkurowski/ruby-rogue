@@ -5,9 +5,10 @@ module World
 
 
   def self.init
-    Camera.init
+    Map.init
     Entities.init
-    Map.generate
+    Camera.init
+    Fov.init
 
     Entities.prefab :player do |e|
       e.position[:x] = @player_x
@@ -33,6 +34,7 @@ module World
 
   def self.render
     Camera.update
+    Fov.update
 
     Terminal.bkcolor Terminal.color_from_argb 255, 6, 8, 14
 
@@ -46,13 +48,20 @@ module World
 
     Display.map do |i, j|
 
-      x    = Camera.x + i
-      y    = Camera.y + j
-      dx   = -Camera.dx
-      dy   = -Camera.dy
+      x   = Camera.x + i
+      y   = Camera.y + j
+      dx  = -Camera.dx
+      dy  = -Camera.dy
+      fov = Fov.at x, y
+
+      if fov == :none
+        Terminal.put i, j, ' '.ord
+        next
+      end
+
       tile = Map.tile x, y
 
-      Terminal.color tile.color.full
+      Terminal.color tile.color[fov]
       Terminal.put_ext i, j, dx, dy, tile.char
 
     end
@@ -65,6 +74,11 @@ module World
       :sprite
     ).each do |entity|
       if entity_is_on_screen? entity
+
+        fov = Fov.at entity.position.x, entity.position.y
+
+        next unless fov == :full or
+                    entity.include? :player
 
         x    = entity.position.x - Camera.x
         y    = entity.position.y - Camera.y

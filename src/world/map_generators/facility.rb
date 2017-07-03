@@ -1,11 +1,11 @@
 module Map::Generator::Facility
 
-  def self.generate tiles, width, height, level = 0
-    @width  = width
-    @height = height
+  def self.generate tiles, level = 0
+    @width  = Map.width
+    @height = Map.height
     @level  = level
 
-    @tiles  = Array.new(width) { |i|  Array.new(height) { |j| tiles[i][j] } }
+    @tiles  = Array.new(@width) { |i| Array.new(@height) { |j| tiles[i][j] } }
 
     @node_min_size = 10
     @node_max_size = 40

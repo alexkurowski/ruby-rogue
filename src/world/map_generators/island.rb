@@ -1,9 +1,9 @@
 module Map::Generator::Island
 
-  def self.generate width, height
-    @width  = width
-    @height = height
-    @tiles  = Array.new(width) { Array.new(height) { :empty } }
+  def self.generate
+    @width  = Map.width
+    @height = Map.height
+    @tiles  = Array.new(@width) { Array.new(@height) { :empty } }
 
     @island_size = @width * 0.2
 

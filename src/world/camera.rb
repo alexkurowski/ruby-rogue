@@ -7,10 +7,9 @@ module Camera
 
 
   def self.init
-    @dirty       = true
-    @offset      = { x: 0, y: 0 }
-    @target_cell = { x: 0, y: 0 }
-    @target      = { x: 0, y: 0 }
+    @dirty  = true
+    @offset = new_vector
+    @target = new_vector
   end
 
 

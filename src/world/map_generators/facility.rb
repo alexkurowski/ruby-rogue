@@ -44,6 +44,7 @@ module Map::Generator::Facility
     create_rooms root
     clean_up
     find_entrance
+    fix_walls
 
     return @tiles
   end
@@ -302,6 +303,55 @@ module Map::Generator::Facility
 
     World.player_x = cx
     World.player_y = cy
+  end
+
+
+  internal def self.fix_walls
+    tiles = Array.new(@width) { |i| Array.new(@height) { |j| @tiles[i][j] } }
+
+    for i in 1...@width - 1
+      for j in 1...@height - 1
+
+        next unless @tiles[i][j] == :wall
+
+        north = @tiles[i][j - 1] == :wall
+        south = @tiles[i][j + 1] == :wall
+        east  = @tiles[i + 1][j] == :wall
+        west  = @tiles[i - 1][j] == :wall
+
+        next if north and south and east and west
+
+        new_tile =
+        if north and east and south
+          :wall_triangle_nes
+        elsif north and west and south
+          :wall_triangle_nws
+        elsif east and south and west
+          :wall_triangle_wse
+        elsif east and north and west
+          :wall_triangle_wne
+        elsif north and west
+          :wall_corner_nw
+        elsif north and east
+          :wall_corner_ne
+        elsif south and west
+          :wall_corner_sw
+        elsif south and east
+          :wall_corner_se
+        elsif west or east
+          :wall_horizontal
+        elsif north or south
+          :wall_vertical
+        else
+          :wall
+        end
+
+        tiles[i][j] = new_tile
+
+      end
+    end
+
+    @tiles = tiles
   end
 
 end

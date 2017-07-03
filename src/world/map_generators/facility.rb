@@ -14,17 +14,18 @@ module Map::Generator::Facility
     @filling       = 3
     @facility_size = @width * 0.3
 
-    root = new_node @width  * 0.5 - @facility_size,
-                    @height * 0.5 - @facility_size,
-                    @facility_size * 2,
-                    @facility_size * 2
+    @root = new_node @width  * 0.5 - @facility_size,
+                     @height * 0.5 - @facility_size,
+                     @facility_size * 2,
+                     @facility_size * 2
     @rooms = []
 
-    fill_with_walls root
-    split_nodes root
-    create_rooms root
+    fill_with_walls @root
+    split_nodes
+    create_rooms @root
     clean_up
     find_entrance
+    place_player
     fix_wall_tiles
 
     return @tiles
@@ -54,8 +55,22 @@ module Map::Generator::Facility
   end
 
 
-  internal def self.split_nodes root
-    nodes = [root]
+  internal def self.fill_with_walls node
+    x1 = node.x.floor
+    x2 = ( node.x + node.w ).floor
+    y1 = node.y.floor
+    y2 = ( node.y + node.h ).floor
+
+    for x in x1..x2
+      for y in y1..y2
+        @tiles[x][y] = :wall
+      end
+    end
+  end
+
+
+  internal def self.split_nodes
+    nodes = [ @root ]
 
     split = true
     while split
@@ -116,24 +131,12 @@ module Map::Generator::Facility
   end
 
 
-  internal def self.fill_with_walls node
-    x1 = node.x.floor
-    x2 = ( node.x + node.w ).floor
-    y1 = node.y.floor
-    y2 = ( node.y + node.h ).floor
-
-    for x in x1..x2
-      for y in y1..y2
-        @tiles[x][y] = :wall
-      end
-    end
-  end
-
-
   internal def self.create_rooms node
+    return if node.nil?
+
     if node.child1 or node.child2
-      create_rooms node.child1 unless node.child1.nil?
-      create_rooms node.child2 unless node.child2.nil?
+      create_rooms node.child1
+      create_rooms node.child2
       create_hall node.child1, node.child2
     else
 
@@ -203,8 +206,7 @@ module Map::Generator::Facility
         dx = -1
       end
 
-      if ( 0 < drunkard.x + dx and drunkard.x + dx < @width  - 1 ) and
-         ( 0 < drunkard.y + dy and drunkard.y + dy < @height - 1 )
+      if inside_node? @root, drunkard.x + dx, drunkard.y + dy
         drunkard[:x] += dx
         drunkard[:y] += dy
         @tiles[drunkard.x][drunkard.y] = :floor
@@ -253,12 +255,18 @@ module Map::Generator::Facility
   end
 
 
+  internal def self.inside_node? node, x, y
+    x > node.x and x < node.x + node.w - 1 and
+    y > node.y and y < node.y + node.h - 1
+  end
+
+
   internal def self.clean_up
     3.times do
       for x in 1...( @width - 1 )
         for y in 1...( @height - 1 )
 
-          walls = adjust_walls x, y
+          walls = count_adjusted_walls x, y
 
           if @tiles[x][y] != :floor and walls <= @smoothing
             @tiles[x][y] = :floor
@@ -270,7 +278,7 @@ module Map::Generator::Facility
   end
 
 
-  internal def self.adjust_walls x, y
+  internal def self.count_adjusted_walls x, y
     count = 0
     count += 1 if @tiles[x - 1][y] != :floor
     count += 1 if @tiles[x + 1][y] != :floor
@@ -281,32 +289,39 @@ module Map::Generator::Facility
 
 
   internal def self.find_entrance
-    rx = @width
-    ry = @height
+    mid = @width * 0.5
+    x   = @width
+    y   = @height
 
     @rooms.each do |room|
-      if room.x1 < rx and room.y1 < ry
-        rx = room.x1
-        ry = room.y1
+      center = room_center room
+
+      if ( center.x - mid ).abs < x and center.y < y
+        x = center.x
+        y = center.y
       end
     end
 
-    for x in ( rx + 1 )..( rx + 4 )
-      for y in 0..ry
-        @tiles[x][y] = :floor if @tiles[x][y] == :wall
+    for i in ( x - 3 )..( x + 3 )
+      for j in 0..y
+        @tiles[i][j] = :floor if @tiles[i][j] == :wall
       end
     end
+  end
 
 
-    cx = @width  * 0.5 - @facility_size + 5
-    cy = @height * 0.5 - @facility_size - 5
+  def self.place_player
+    x = @width  * 0.5
+    y = @height * 0.5 - @facility_size
 
-    while @tiles[cx][cy] != :grass
-      cy -= 1
+    while @tiles[x][y] == :wall or
+          @tiles[x][y] == :floor or
+          @tiles[x][y] == :grass
+      y -= 1
     end
 
-    World.player_x = cx
-    World.player_y = cy
+    World.player_x = x
+    World.player_y = y
   end
 
 

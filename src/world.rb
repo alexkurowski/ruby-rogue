@@ -34,6 +34,8 @@ module World
   def self.render
     Camera.update
 
+    Terminal.bkcolor Terminal.color_from_argb 255, 6, 8, 14
+
     render_tiles
     render_entities
   end

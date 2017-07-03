@@ -11,9 +11,7 @@ module Map
     @height = opts.height
 
     @types = define_tile_types opts.tile_types
-    @tiles = Array.new(@width) { Array.new(@height) { :empty } }
-
-    generate_map
+    @tiles = Generator.generate @width, @height
   end
 
 
@@ -51,7 +49,7 @@ module Map
       types[key.to_sym] = {
         char:  type.char.ord,
         color: define_tile_color(type.color),
-        walk:  type.can&.include?('walk'),
+        walk:  type.can&.include?('walk') || true,
         fly:   type.can&.include?('fly'),
         see:   type.can&.include?('see')
       }
@@ -71,39 +69,6 @@ module Map
       full: Terminal.color_from_argb(255, r, g, b),
       half: Terminal.color_from_argb(120, r, g, b)
     }
-  end
-
-
-  internal def self.generate_map
-    generate_room 30, 10, 20, 12
-  end
-
-
-  internal def self.generate_room x, y, w, h
-    w += 1
-    h += 1
-
-    for i in (x) .. (x + w)
-      for j in (y) .. (y + h)
-        if i == x or i == x + w
-          put_tile i, j, :wall_vertical
-        elsif j == y or j == y + h
-          put_tile i, j, :wall_horizontal
-        else
-          put_tile i, j, :floor
-        end
-      end
-    end
-
-    put_tile x,     y,     :wall_corner_nw
-    put_tile x + w, y,     :wall_corner_ne
-    put_tile x,     y + h, :wall_corner_sw
-    put_tile x + w, y + h, :wall_corner_se
-  end
-
-
-  internal def self.put_tile x, y, tile
-    @tiles[x][y] = tile
   end
 
 end

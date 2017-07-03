@@ -1,8 +1,8 @@
 terminal_options:
   width: 80
-  height: 25
+  height: 40
   title: roguelike
-  mode: font
+  mode: tiles
   tile_name: tileset
   tile_size: 12
   font_name: teko
@@ -12,17 +12,35 @@ terminal_options:
 
 
 map_options:
-  width: 256
-  height: 256
+  width: 120
+  height: 120
 
   tile_types:
     empty:
       char: ' '
 
+    water:
+      char: '~'
+      color: 40 80 200
+      can: see
+
+    sand:
+      char: '.'
+      color: 240 220 0
+      can: walk fly see
+
+    grass:
+      char: '"'
+      color: 120 180 10
+      can: walk fly see
+
     floor:
       char: '.'
       color: 120 120 120
       can: walk fly see
+
+    wall:
+      char: '╬'
 
     wall_horizontal:
       char: '═'
@@ -33,19 +51,35 @@ map_options:
       color: 190 170 140
 
     wall_corner_nw:
-      char: '╔'
-      color: 190 170 140
-
-    wall_corner_ne:
-      char: '╗'
-      color: 190 170 140
-
-    wall_corner_sw:
       char: '╚'
       color: 190 170 140
 
-    wall_corner_se:
+    wall_corner_ne:
       char: '╝'
+      color: 190 170 140
+
+    wall_corner_sw:
+      char: '╔'
+      color: 190 170 140
+
+    wall_corner_se:
+      char: '╗'
+      color: 190 170 140
+
+    wall_triangle_nws:
+      char: '╠'
+      color: 190 170 140
+
+    wall_triangle_nes:
+      char: '╣'
+      color: 190 170 140
+
+    wall_triangle_esw:
+      char: '╦'
+      color: 190 170 140
+
+    wall_triangle_enw:
+      char: '╩'
       color: 190 170 140
 
 

@@ -81,7 +81,7 @@ module Display
 
 
   def self.big?
-    width * height > 3000
+    width * height > 4000
   end
 
 

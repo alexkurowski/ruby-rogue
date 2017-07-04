@@ -11,8 +11,8 @@ module World
     Fov.init
 
     Entities.prefab :player do |e|
-      e.position[:x] = @player_x
-      e.position[:y] = @player_y
+      e.position[:x] = @player_x.floor
+      e.position[:y] = @player_y.floor
       e.sprite[:char] = '@'
 
       Camera.jump_to e.position.x, e.position.y - 10
@@ -36,8 +36,6 @@ module World
     Camera.update
     Fov.update
 
-    Terminal.bkcolor Terminal.color_from_argb 255, 6, 8, 14
-
     render_tiles
     render_entities
   end
@@ -45,6 +43,9 @@ module World
 
   internal def self.render_tiles
     return unless Camera.dirty?
+
+    black = Terminal.color_from_argb 255, 6, 8, 14
+    Terminal.bkcolor black
 
     Display.map do |i, j|
 

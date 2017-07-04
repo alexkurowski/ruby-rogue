@@ -90,19 +90,6 @@ module Map
   end
 
 
-  internal def self.define_tile_color color
-    r, g, b = 255, 255, 255
-
-    if color.is_a? String
-      r, g, b = color.split(' ').map(&:to_i)
-    end
-
-    {
-      full: Terminal.color_from_argb(255, r, g, b),
-      half: Terminal.color_from_argb(120, r, g, b)
-    }
-  end
-
   internal def self.define_tile_colors colors
     [ colors ].flatten.inject([]) do |result, color|
       r, g, b = 255, 255, 255
@@ -113,7 +100,7 @@ module Map
 
       result << {
         full: Terminal.color_from_argb(255, r, g, b),
-        half: Terminal.color_from_argb(120, r, g, b)
+        half: Terminal.color_from_argb(40, r, g, b)
       }
     end
   end

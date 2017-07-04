@@ -72,8 +72,8 @@ module Display
 
 
   def self.map
-    for i in 1...width
-      for j in 1...height
+    for i in 0...width
+      for j in 0...height
         yield i, j
       end
     end

@@ -55,7 +55,7 @@ module World
       dy  = -Camera.dy
       fov = Fov.at x, y
 
-      if fov == :none
+      if fov == :none or i == 0 or j == 0
         Terminal.put i, j, ' '.ord
         next
       end

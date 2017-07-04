@@ -107,7 +107,7 @@ module Fov
           end
         end
 
-        break if blocked? y1 + y_relative, x1 + x_relative
+        break if blocked? x1 + x_relative, y1 + y_relative
       end
 
       if swapped_axis

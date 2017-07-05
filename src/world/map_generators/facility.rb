@@ -57,14 +57,20 @@ module Map::Generator::Facility
 
 
   internal def self.fill_with_walls node
-    x1 = node.x.floor
-    x2 = ( node.x + node.w ).floor
-    y1 = node.y.floor
-    y2 = ( node.y + node.h ).floor
+    x1 = node.x.floor - 1
+    x2 = ( node.x + node.w ).floor + 1
+    y1 = node.y.floor - 1
+    y2 = ( node.y + node.h ).floor + 1
 
     for x in x1..x2
       for y in y1..y2
-        @tiles[x][y] = :wall
+
+        if @level == 0 and x == x1 or x == x2 or y == y1 or y == y2
+          @tiles[x][y] = :wall if rand > 0.2
+        else
+          @tiles[x][y] = :wall
+        end
+
       end
     end
   end

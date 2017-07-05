@@ -5,7 +5,7 @@ module Map
 
 
   def self.init
-    opts = CONF.map_options
+    opts = CONFIG.map_options
 
     @width  = opts.width
     @height = opts.height

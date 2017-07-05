@@ -8,9 +8,9 @@ Dir["#{ROOT}/src/**/*.rb"].each { |f| load f }
 
 # Store configuration file in a global hash
 require 'yaml'
-CONF     = YAML.load_file "#{ROOT}/conf.yml"
-TILES    = YAML.load_file "#{ROOT}/tiles.yml"
-PREFABS  = YAML.load_file "#{ROOT}/prefabs.yml"
+CONFIG   = YAML.load_file "#{ROOT}/config/config.yml"
+TILES    = YAML.load_file "#{ROOT}/config/tiles.yml"
+PREFABS  = YAML.load_file "#{ROOT}/config/prefabs.yml"
 
 
 Game.play

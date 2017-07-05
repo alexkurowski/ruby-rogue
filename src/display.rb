@@ -10,7 +10,7 @@ module Display
 
 
   def self.open
-    opts = CONF.terminal_options
+    opts = CONFIG.terminal_options
 
     @width  = opts.width
     @height = opts.height
@@ -89,9 +89,9 @@ module Display
     @font_size = val
 
     if @mode == 'font'
-      Terminal.set "font: #{ ROOT }/assets/#{ @font_name }.ttf, size=#{ @font_size }"
+      Terminal.set "font: #{ ROOT }/assets/fonts/#{ @font_name }.ttf, size=#{ @font_size }"
     else
-      Terminal.set "font: #{ ROOT }/assets/#{ @tile_name }.png, size=#{ @tile_size }x#{ @tile_size }, codepage=437"
+      Terminal.set "font: #{ ROOT }/assets/tiles/#{ @tile_name }.png, size=#{ @tile_size }x#{ @tile_size }, codepage=437"
     end
 
     Camera.set_dirty

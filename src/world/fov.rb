@@ -1,7 +1,7 @@
 module Fov
 
   def self.init
-    opts = CONF.fov_options
+    opts = CONFIG.fov_options
 
     set_radius opts.normal_radius
 

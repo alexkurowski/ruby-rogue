@@ -36,8 +36,12 @@ module World
     Camera.update
     Fov.update
 
+    Display.render_start
+
     render_tiles
     render_entities
+
+    Display.render_finish
   end
 
 
@@ -46,11 +50,7 @@ module World
 
     offset_x = -Camera.dx.floor
     offset_y = -Camera.dy.floor
-    bkcolor  = Display.background
-
-    output = ""
-    output << "[offset=#{ offset_x },#{ offset_y }]"
-    output << "[bkcolor=##{ bkcolor }]"
+    Display.set_tile_offset offset_x, offset_y
 
     for j in 0...Display.height
       for i in 0...Display.width
@@ -60,20 +60,20 @@ module World
         fov = Fov.at x, y
 
         if fov == :none or i == 0 or j == 0
-          output << ' '
+          Display.add_empty_tile
           next
         end
 
         tile = Map.tile x, y
 
-        output << "[color=#{ tile.color[fov] }]"
-        output << tile.char
+        Display.add_tile tile.char, tile.color[fov]
 
       end
-      output << "\n"
+
+      Display.add_newline_tile
     end
 
-    Terminal.print 0, 0, output
+    Display.draw_tiles
   end
 
 
@@ -89,14 +89,14 @@ module World
         next unless fov == :full or
                     entity.include? :player
 
-        x    = entity.position.x - Camera.x
-        y    = entity.position.y - Camera.y
-        dx   = entity.sprite.dx - Camera.dx
-        dy   = entity.sprite.dy - Camera.dy
-        char = entity.sprite.char.ord
+        x     = entity.position.x - Camera.x
+        y     = entity.position.y - Camera.y
+        dx    = entity.sprite.dx - Camera.dx
+        dy    = entity.sprite.dy - Camera.dy
+        char  = entity.sprite.char.ord
+        color = entity.sprite.color
 
-        Terminal.color entity.sprite.color
-        Terminal.put_ext x, y, dx, dy, char
+        Display.draw_entity x, y, dx, dy, char, color
 
       end
     end

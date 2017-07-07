@@ -20,9 +20,9 @@ module Game
 
       Input.read
       World.update
-      Display.render
+      World.render
 
-      frame_end
+      frame_finish
 
     end
   end
@@ -33,7 +33,7 @@ module Game
   end
 
 
-  internal def self.frame_end
+  internal def self.frame_finish
     fps_target = 30
 
     elapsed = Time.now - @frame_start_time

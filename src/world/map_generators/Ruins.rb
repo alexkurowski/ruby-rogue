@@ -9,11 +9,11 @@ module Map::Generator::Ruins
 
     @node_min_size = 10
     @node_max_size = 40
-    @room_min_size = ( @node_min_size * 0.7 ).floor
-    @room_max_size = ( @node_max_size * 0.7 ).floor
+    @room_min_size = ( @node_min_size * 0.8 ).floor
+    @room_max_size = ( @node_max_size * 0.8 ).floor
     @smoothing     = 1
     @filling       = 3
-    @ruins_size    = @width * 0.3
+    @ruins_size    = @width * 0.35
 
     @root = new_node @width  * 0.5 - @ruins_size,
                      @height * 0.5 - @ruins_size,
@@ -24,6 +24,7 @@ module Map::Generator::Ruins
     fill_with_walls @root
     split_nodes
     create_rooms @root
+    clear_some_nodes @root
     clean_up
     find_entrance
     place_player
@@ -35,10 +36,10 @@ module Map::Generator::Ruins
 
   internal def self.new_node x, y, w, h
     {
-      x: x,
-      y: y,
-      w: w,
-      h: h,
+      x: x.floor,
+      y: y.floor,
+      w: w.floor,
+      h: h.floor,
       child1: nil,
       child2: nil,
       room:   nil
@@ -57,20 +58,28 @@ module Map::Generator::Ruins
 
 
   internal def self.fill_with_walls node
-    x1 = node.x.floor - 1
-    x2 = ( node.x + node.w ).floor + 1
-    y1 = node.y.floor - 1
-    y2 = ( node.y + node.h ).floor + 1
+    x1 = node.x.floor
+    x2 = ( node.x + node.w ).floor
+    y1 = node.y.floor
+    y2 = ( node.y + node.h ).floor
 
     for x in x1..x2
       for y in y1..y2
+        @tiles[x][y] = :wall
+      end
+    end
+  end
 
-        if @level == 0 and x == x1 or x == x2 or y == y1 or y == y2
-          @tiles[x][y] = :wall if rand > 0.2
-        else
-          @tiles[x][y] = :wall
-        end
 
+  internal def self.clear_from_walls node, newTile
+    x1 = node.x.floor
+    x2 = ( node.x + node.w ).floor
+    y1 = node.y.floor
+    y2 = ( node.y + node.h ).floor
+
+    for x in x1..x2
+      for y in y1..y2
+        @tiles[x][y] = newTile if @tiles[x][y] == :wall
       end
     end
   end
@@ -269,6 +278,30 @@ module Map::Generator::Ruins
   end
 
 
+  internal def self.clear_some_nodes node
+    if node.child1.nil? and node.child2.nil?
+      clearance_chance = 0.1
+      newTile = :floor
+
+      if node.x == @root.x or
+         node.y == @root.y or
+         node.x + node.w == @root.x + @root.w or
+         node.y + node.h == @root.y + @root.h
+        clearance_chance = 0.15
+        newTile = :sand
+      end
+
+      if rand < clearance_chance
+        clear_from_walls node, newTile
+      end
+
+    else
+      clear_some_nodes node.child1 unless node.child1.nil?
+      clear_some_nodes node.child2 unless node.child2.nil?
+    end
+  end
+
+
   internal def self.clean_up
     3.times do
       for x in 1...( @width - 1 )
@@ -304,7 +337,7 @@ module Map::Generator::Ruins
     @rooms.each do |room|
       center = room_center room
 
-      if ( center.x - mid ).abs < x and center.y < y
+      if ( center.x - mid ).abs < ( x - mid ).abs and center.y < y
         x = center.x
         y = center.y
       end

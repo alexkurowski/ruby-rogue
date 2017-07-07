@@ -6,7 +6,8 @@ module Display
   global :width,
          :height,
          :cell_width,
-         :cell_height
+         :cell_height,
+         :background
 
 
   def self.open
@@ -14,6 +15,8 @@ module Display
 
     @width  = opts.width
     @height = opts.height
+
+    @background = Terminal.color_from_argb 255, 6, 8, 14
 
     @title         = opts.title
     @mode          = opts.mode
@@ -71,17 +74,8 @@ module Display
   end
 
 
-  def self.map
-    for i in 0...width
-      for j in 0...height
-        yield i, j
-      end
-    end
-  end
-
-
   def self.big?
-    width * height > 4000
+    width * height > 6000
   end
 
 

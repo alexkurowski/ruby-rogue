@@ -75,7 +75,7 @@ module Map
 
           @types[key] << variant
           @types[variant] = {
-            char:  char.ord,
+            char:  char, # .ord,
             color: color,
             walk:  can.walk,
             fly:   can.fly,
@@ -107,8 +107,8 @@ module Map
 
 
   internal def self.generate
-    tiles = Generator::Island.generate
-    tiles = Generator::Facility.generate tiles
+    tiles = Array.new(@width) { Array.new(@height) { :sand } }
+    tiles = Generator::Ruins.generate tiles
 
     @tiles = Array.new(@width) { Array.new(@height) { :empty_0 } }
 

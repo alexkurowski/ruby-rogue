@@ -44,28 +44,36 @@ module World
   internal def self.render_tiles
     return unless Camera.dirty?
 
-    black = Terminal.color_from_argb 255, 6, 8, 14
-    Terminal.bkcolor black
+    offset_x = -Camera.dx.floor
+    offset_y = -Camera.dy.floor
+    bkcolor  = Display.background
 
-    Display.map do |i, j|
+    output = ""
+    output << "[offset=#{ offset_x },#{ offset_y }]"
+    output << "[bkcolor=##{ bkcolor }]"
 
-      x   = Camera.x + i
-      y   = Camera.y + j
-      dx  = -Camera.dx
-      dy  = -Camera.dy
-      fov = Fov.at x, y
+    for j in 0...Display.height
+      for i in 0...Display.width
 
-      if fov == :none or i == 0 or j == 0
-        Terminal.put i, j, ' '.ord
-        next
+        x   = Camera.x + i
+        y   = Camera.y + j
+        fov = Fov.at x, y
+
+        if fov == :none or i == 0 or j == 0
+          output << ' '
+          next
+        end
+
+        tile = Map.tile x, y
+
+        output << "[color=#{ tile.color[fov] }]"
+        output << tile.char
+
       end
-
-      tile = Map.tile x, y
-
-      Terminal.color tile.color[fov]
-      Terminal.put_ext i, j, dx, dy, tile.char
-
+      output << "\n"
     end
+
+    Terminal.print 0, 0, output
   end
 
 

@@ -1,4 +1,4 @@
-module Map::Generator::Facility
+module Map::Generator::Ruins
 
   def self.generate tiles, level = 0
     @width  = Map.width
@@ -13,12 +13,12 @@ module Map::Generator::Facility
     @room_max_size = ( @node_max_size * 0.7 ).floor
     @smoothing     = 1
     @filling       = 3
-    @facility_size = @width * 0.3
+    @ruins_size    = @width * 0.3
 
-    @root = new_node @width  * 0.5 - @facility_size,
-                     @height * 0.5 - @facility_size,
-                     @facility_size * 2,
-                     @facility_size * 2
+    @root = new_node @width  * 0.5 - @ruins_size,
+                     @height * 0.5 - @ruins_size,
+                     @ruins_size * 2,
+                     @ruins_size * 2
     @rooms = []
 
     fill_with_walls @root
@@ -320,7 +320,7 @@ module Map::Generator::Facility
 
   def self.place_player
     x = @width  * 0.5
-    y = @height * 0.5 - @facility_size
+    y = @height * 0.5 - @ruins_size
 
     while @tiles[x][y] == :wall or
           @tiles[x][y] == :floor or

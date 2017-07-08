@@ -40,6 +40,7 @@ module World
 
     render_tiles
     render_entities
+    render_ui
 
     Display.render_finish
   end
@@ -61,7 +62,7 @@ module World
         y   = Camera.y + j
         fov = Fov.at x, y
 
-        if fov == :none or i == 0 or j == 0
+        if fov == :none
           Display.add_empty_tile
           next
         end
@@ -82,6 +83,8 @@ module World
 
 
   internal def self.render_entities
+    Display.clear_entities
+
     Entities.filter_by_components(
       :position,
       :sprite
@@ -104,6 +107,17 @@ module World
 
       end
     end
+  end
+
+
+  internal def self.render_ui
+    Display.clear_ui
+    x     = Input.mouse_x
+    y     = Input.mouse_y
+    char  = '█'.ord
+    color = Terminal.color_from_name 'white'
+
+    Display.draw_ui x, y, char, color
   end
 
 

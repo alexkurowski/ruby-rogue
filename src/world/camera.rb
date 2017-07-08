@@ -40,8 +40,8 @@ module Camera
 
     @x  = @target.x.floor
     @y  = @target.y.floor
-    @dx = ( @offset.x - @target.x ) * Display.cell_width  + Display.cell_width  * 0.5
-    @dy = ( @offset.y - @target.y ) * Display.cell_height + Display.cell_height * 0.5
+    @dx = ( @offset.x - @target.x ) * Display.cell_width
+    @dy = ( @offset.y - @target.y ) * Display.cell_height
   end
 
 

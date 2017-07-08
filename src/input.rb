@@ -4,6 +4,8 @@ module Input
 
 
   global :action,
+         :mouse_x,
+         :mouse_y,
          :quit
 
 
@@ -14,6 +16,9 @@ module Input
 
   def self.read
     @action = nil
+
+    @mouse_x = Terminal.state TK_MOUSE_X
+    @mouse_y = Terminal.state TK_MOUSE_Y
 
     return unless Terminal.has_input?
 

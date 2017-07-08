@@ -27,6 +27,12 @@ module Display
     @background    = Terminal.color_from_argb 255, 6, 8, 14
     @tiles_output  = ''
 
+    @layers = {
+      tiles:    0,
+      entities: 1,
+      ui:       2
+    }
+
     Terminal.open
 
     Terminal.set """
@@ -54,8 +60,20 @@ module Display
 
 
   def self.clear_tiles
+    Terminal.layer @layers.tiles
     Terminal.bkcolor @background
     Terminal.clear
+  end
+
+
+  def self.clear_entities
+    Terminal.layer @layers.entities
+  end
+
+
+  def self.clear_ui
+    Terminal.layer @layers.ui
+    Terminal.clear_area 0, 0, @width, @height
   end
 
 
@@ -81,15 +99,19 @@ module Display
 
 
   def self.draw_tiles
-    Terminal.layer 0
     Terminal.print 0, 0, @tiles_output
   end
 
 
   def self.draw_entity x, y, dx, dy, char, color
-    Terminal.layer 1
     Terminal.color color
     Terminal.put_ext x, y, dx, dy, char
+  end
+
+
+  def self.draw_ui x, y, char, color
+    Terminal.color color
+    Terminal.put x, y, char
   end
 
 

@@ -26,7 +26,6 @@ module Display
 
     @background    = Terminal.color_from_argb 255, 6, 8, 14
     @tiles_output  = ''
-    @tiles_color   = nil
 
     Terminal.open
 
@@ -51,17 +50,22 @@ module Display
 
   def self.render_start
     @tiles_output = ''
-    @tiles_output << "[bkcolor=#{ @background }]"
+  end
+
+
+  def self.clear_tiles
+    Terminal.bkcolor @background
+    Terminal.clear
   end
 
 
   def self.set_tile_offset dx, dy
-    @tiles_output << "[offset=#{ dx },#{dy}]"
+    @tiles_output << "[offset=#{ dx },#{ dy }]"
   end
 
 
   def self.add_tile char, color
-    @tiles_output << "[color=#{ color }]"
+    @tiles_output << "[color=##{ color }]"
     @tiles_output << char
   end
 
@@ -77,11 +81,13 @@ module Display
 
 
   def self.draw_tiles
+    Terminal.layer 0
     Terminal.print 0, 0, @tiles_output
   end
 
 
   def self.draw_entity x, y, dx, dy, char, color
+    Terminal.layer 1
     Terminal.color color
     Terminal.put_ext x, y, dx, dy, char
   end
@@ -113,7 +119,7 @@ module Display
 
 
   def self.big?
-    width * height > 6000
+    width * height > 5000
   end
 
 

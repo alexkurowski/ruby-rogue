@@ -3,7 +3,7 @@ terminal_options:
   height: 40
   title: roguelike
   mode: tiles
-  tile_name: tileset
+  tile_name: tileset12
   tile_size: 12
   font_name: teko
   font_size: 12

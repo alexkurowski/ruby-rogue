@@ -75,7 +75,7 @@ module Map
 
           @types[key] << variant
           @types[variant] = {
-            char:  char, # .ord,
+            char:  char,
             color: color,
             walk:  can.walk,
             fly:   can.fly,
@@ -95,12 +95,14 @@ module Map
       r, g, b = 255, 255, 255
 
       if color.is_a? String
-        r, g, b = color.split(' ').map(&:to_i)
+        r, g, b = color.split(' ').map do |c|
+          c.to_i.to_s(16).rjust 2, '0'
+        end
       end
 
       result << {
-        full: Terminal.color_from_argb(255, r, g, b),
-        half: Terminal.color_from_argb(40, r, g, b)
+        full: "ff#{r}#{g}#{b}",
+        half: "30#{r}#{g}#{b}"
       }
     end
   end

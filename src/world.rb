@@ -48,6 +48,8 @@ module World
   internal def self.render_tiles
     return unless Camera.dirty?
 
+    Display.clear_tiles
+
     offset_x = -Camera.dx.floor
     offset_y = -Camera.dy.floor
     Display.set_tile_offset offset_x, offset_y
@@ -64,9 +66,11 @@ module World
           next
         end
 
-        tile = Map.tile x, y
+        tile  = Map.tile x, y
+        char  = tile.char
+        color = tile.color[fov]
 
-        Display.add_tile tile.char, tile.color[fov]
+        Display.add_tile char, color
 
       end
 

@@ -1,27 +1,27 @@
 module Map::Generator::Ruins
 
-  def self.generate tiles, level = 0
+  def self.generate level = 0
     @width  = Map.width
     @height = Map.height
     @level  = level
 
-    @tiles  = Array.new(@width) { |i| Array.new(@height) { |j| tiles[i][j] } }
+    @tiles  = Array.new(@width) { |i| Array.new(@height) { |j| :empty } }
 
     @node_min_size = 20
     @node_max_size = 40
-    @room_min_size = ( @node_min_size * 0.6 ).floor
-    @room_max_size = ( @node_max_size * 0.6 ).floor
+    @room_min_size = 5
+    @room_max_size = 20
     @smoothing     = 1
     @filling       = 3
 
-    pad = 2
-    @root = new_node pad, pad, @width - pad * 2, @height - pad * 2
+    @pad   = 2
+    @root  = new_node @pad, @pad, @width - @pad * 2, @height - @pad * 2
     @rooms = []
 
-    fill_with_walls @root
     split_nodes
     create_rooms @root
     clean_up
+    fill_with_walls
     place_player
     place_exit
     fix_wall_tiles
@@ -50,20 +50,6 @@ module Map::Generator::Ruins
       x2: ( x + w ).floor,
       y2: ( y + h ).floor
     }
-  end
-
-
-  internal def self.fill_with_walls node
-    x1 = node.x.floor
-    x2 = ( node.x + node.w - 1 ).floor
-    y1 = node.y.floor
-    y2 = ( node.y + node.h - 1 ).floor
-
-    for x in x1..x2
-      for y in y1..y2
-        @tiles[x][y] = :wall
-      end
-    end
   end
 
 
@@ -154,8 +140,8 @@ module Map::Generator::Ruins
 
       w = random @room_min_size, [ @room_max_size, node.w - 1 ].min
       h = random @room_min_size, [ @room_max_size, node.h - 1 ].min
-      x = random node.x, node.x + (node.w - 1) - w
-      y = random node.y, node.y + (node.h - 1) - h
+      x = random node.x + @pad, node.x + (node.w - 1) - w - @pad * 2
+      y = random node.y + @pad, node.y + (node.h - 1) - h - @pad * 2
       node[:room] = new_room x, y, w, h
       @rooms << node.room
       put_room node.room
@@ -191,9 +177,9 @@ module Map::Generator::Ruins
       weight = 1
 
       if drunkard.x < goal.x
-        east += weight
+        east += weight * 2
       elsif drunkard.x > goal.x
-        west += weight
+        west += weight * 2
       elsif drunkard.y < goal.y
         south += weight
       elsif drunkard.y > goal.y
@@ -311,6 +297,27 @@ module Map::Generator::Ruins
         end
       end
     end
+  end
+
+
+  internal def self.fill_with_walls
+    for x in 1...( @width - 1 )
+      for y in 1...( @height - 1 )
+        @tiles[x][y] = :wall if @tiles[x][y] == :empty and any_adjusted_floors? x, y
+      end
+    end
+  end
+
+
+  internal def self.any_adjusted_floors? x, y
+    @tiles[x - 1][y - 1] == :floor ||
+    @tiles[x    ][y - 1] == :floor ||
+    @tiles[x + 1][y - 1] == :floor ||
+    @tiles[x - 1][y    ] == :floor ||
+    @tiles[x + 1][y    ] == :floor ||
+    @tiles[x - 1][y + 1] == :floor ||
+    @tiles[x    ][y + 1] == :floor ||
+    @tiles[x + 1][y + 1] == :floor
   end
 
 

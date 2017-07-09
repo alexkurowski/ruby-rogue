@@ -109,8 +109,7 @@ module Map
 
 
   internal def self.generate
-    tiles = Array.new(@width) { Array.new(@height) { :wall } }
-    tiles = Generator::Ruins.generate tiles
+    tiles = Generator::Ruins.generate
 
     @tiles = Array.new(@width) { Array.new(@height) { :empty_0 } }
 

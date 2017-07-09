@@ -7,27 +7,23 @@ module Map::Generator::Ruins
 
     @tiles  = Array.new(@width) { |i| Array.new(@height) { |j| tiles[i][j] } }
 
-    @node_min_size = 10
+    @node_min_size = 20
     @node_max_size = 40
-    @room_min_size = ( @node_min_size * 0.8 ).floor
-    @room_max_size = ( @node_max_size * 0.8 ).floor
+    @room_min_size = ( @node_min_size * 0.6 ).floor
+    @room_max_size = ( @node_max_size * 0.6 ).floor
     @smoothing     = 1
     @filling       = 3
-    @ruins_size    = @width * 0.35
 
-    @root = new_node @width  * 0.5 - @ruins_size,
-                     @height * 0.5 - @ruins_size,
-                     @ruins_size * 2,
-                     @ruins_size * 2
+    pad = 2
+    @root = new_node pad, pad, @width - pad * 2, @height - pad * 2
     @rooms = []
 
     fill_with_walls @root
     split_nodes
     create_rooms @root
-    clear_some_nodes @root
     clean_up
-    find_entrance
     place_player
+    place_exit
     fix_wall_tiles
 
     return @tiles
@@ -59,9 +55,9 @@ module Map::Generator::Ruins
 
   internal def self.fill_with_walls node
     x1 = node.x.floor
-    x2 = ( node.x + node.w ).floor
+    x2 = ( node.x + node.w - 1 ).floor
     y1 = node.y.floor
-    y2 = ( node.y + node.h ).floor
+    y2 = ( node.y + node.h - 1 ).floor
 
     for x in x1..x2
       for y in y1..y2
@@ -73,9 +69,9 @@ module Map::Generator::Ruins
 
   internal def self.clear_from_walls node, newTile
     x1 = node.x.floor
-    x2 = ( node.x + node.w ).floor
+    x2 = ( node.x + node.w - 1 ).floor
     y1 = node.y.floor
-    y2 = ( node.y + node.h ).floor
+    y2 = ( node.y + node.h - 1 ).floor
 
     for x in x1..x2
       for y in y1..y2
@@ -222,8 +218,7 @@ module Map::Generator::Ruins
         dx = -1
       end
 
-      if @level == 0 or
-         inside_node? @root, drunkard.x + dx, drunkard.y + dy
+      if inside_node? @root, drunkard.x + dx, drunkard.y + dy
         drunkard[:x] += dx
         drunkard[:y] += dy
         @tiles[drunkard.x][drunkard.y] = :floor
@@ -329,40 +324,41 @@ module Map::Generator::Ruins
   end
 
 
-  internal def self.find_entrance
-    mid = @width * 0.5
-    x   = @width
-    y   = @height
+  internal def self.place_player
+    node = if @level.odd?
+           then get_leftmost_room @root
+           else get_rightmost_room @root
+           end
 
-    @rooms.each do |room|
-      center = room_center room
+    center = room_center node.room
+    x = center.x + 1
+    y = center.y + 1
 
-      if ( center.x - mid ).abs < ( x - mid ).abs and center.y < y
-        x = center.x
-        y = center.y
-      end
-    end
+    World.player_x = x
+    World.player_y = y
+  end
 
-    for i in ( x - 3 )..( x + 3 )
-      for j in 0..y
-        @tiles[i][j] = :floor if @tiles[i][j] == :wall
-      end
+
+  internal def self.place_exit
+    room = get_room @root
+  end
+
+
+  internal def self.get_leftmost_room node
+    if node.child1.nil?
+      node
+    else
+      get_leftmost_room node.child1
     end
   end
 
 
-  def self.place_player
-    x = @width  * 0.5
-    y = @height * 0.5 - @ruins_size
-
-    while @tiles[x][y] == :wall or
-          @tiles[x][y] == :floor or
-          @tiles[x][y] == :grass
-      y -= 1
+  internal def self.get_rightmost_room node
+    if node.child2.nil?
+      node
+    else
+      get_leftmost_room node.child2
     end
-
-    World.player_x = x
-    World.player_y = y
   end
 
 

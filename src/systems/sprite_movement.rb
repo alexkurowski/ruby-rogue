@@ -3,19 +3,19 @@ def System.sprite_movement
 
   entities.each do |entity|
     if entity.sprite.dx.abs > min_difference
-      entity.sprite[:dx] *= drag
+      entity.sprite.dx *= drag
     end
 
     if entity.sprite.dy.abs > min_difference
-      entity.sprite[:dy] *= drag
+      entity.sprite.dy *= drag
     end
 
     if entity.sprite.dx.abs <= min_difference
-      entity.sprite[:dx] = 0
+      entity.sprite.dx = 0
     end
 
     if entity.sprite.dy.abs <= min_difference
-      entity.sprite[:dy] = 0
+      entity.sprite.dy = 0
     end
   end
 end

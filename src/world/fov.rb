@@ -18,11 +18,11 @@ module Fov
   def self.update
     entity = World.player
 
-    @old_center[:x] = @center.x
-    @old_center[:y] = @center.y
+    @old_center.x = @center.x
+    @old_center.y = @center.y
 
-    @center[:x] = entity.position.x
-    @center[:y] = entity.position.y
+    @center.x = entity.position.x
+    @center.y = entity.position.y
 
     @dirty = @force_dirty ||
              @center.x != @old_center.x ||

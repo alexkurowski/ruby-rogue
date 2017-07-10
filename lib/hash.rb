@@ -3,9 +3,14 @@
 class Hash
 
   def method_missing method, *opts
-    if method[-1] == '?'
-    then self.include? method[0...-1].to_sym
-    else self[method.to_sym] || self[method.to_s]
+    method_type = method[-1]
+
+    if method_type == '?'
+      self.include? method[0...-1].to_sym
+    elsif method_type == '='
+      self[ method[0...-1].to_sym ] = opts.first
+    else
+      self[method] || self[method.to_s]
     end
   end
 

@@ -111,11 +111,11 @@ module Map::Generator::Ruins
 
     case split
     when :horizontal
-      node[:child1] = new_node node.x, node.y, node.w, s
-      node[:child2] = new_node node.x, node.y + s, node.w, node.h - s
+      node.child1 = new_node node.x, node.y, node.w, s
+      node.child2 = new_node node.x, node.y + s, node.w, node.h - s
     when :vertical
-      node[:child1] = new_node node.x, node.y, s, node.h
-      node[:child2] = new_node node.x + s, node.y, node.w - s, node.h
+      node.child1 = new_node node.x, node.y, s, node.h
+      node.child2 = new_node node.x + s, node.y, node.w - s, node.h
     end
 
     true
@@ -146,7 +146,7 @@ module Map::Generator::Ruins
       h = random @room_min_size, [ @room_max_size, node.h - 1 ].min
       x = random node.x + @pad, node.x + (node.w - 1) - w - @pad * 2
       y = random node.y + @pad, node.y + (node.h - 1) - h - @pad * 2
-      node[:room] = new_room x, y, w, h
+      node.room = new_room x, y, w, h
       @rooms << node.room
       put_room node.room
     end
@@ -209,8 +209,8 @@ module Map::Generator::Ruins
       end
 
       if inside_node? @root, drunkard.x + dx, drunkard.y + dy
-        drunkard[:x] += dx
-        drunkard[:y] += dy
+        drunkard.x += dx
+        drunkard.y += dy
         @tiles[drunkard.x][drunkard.y] = :floor
       end
     end
@@ -220,8 +220,8 @@ module Map::Generator::Ruins
   internal def self.get_room node
     return node.room if node.room
 
-    node[:room1] = get_room node.child1 unless node.child1.nil?
-    node[:room2] = get_room node.child2 unless node.child2.nil?
+    node.room1 = get_room node.child1 unless node.child1.nil?
+    node.room2 = get_room node.child2 unless node.child2.nil?
 
     return nil if node.child1.nil? and node.child2.nil?
 
@@ -362,8 +362,8 @@ module Map::Generator::Ruins
 
       type = :mob
       position = new_vector
-      position[:x] = random room.x1, room.x2
-      position[:y] = random room.y1, room.y2
+      position.x = random room.x1, room.x2
+      position.y = random room.y1, room.y2
 
       enemies << {
         type:     type,

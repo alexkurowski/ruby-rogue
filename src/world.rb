@@ -29,8 +29,8 @@ module World
     return if @initial_player_position.nil?
 
     Entities.prefab :player do |entity|
-      entity.position[:x]  = @initial_player_position.x
-      entity.position[:y]  = @initial_player_position.y
+      entity.position.x = @initial_player_position.x
+      entity.position.y = @initial_player_position.y
 
       @player = entity
 
@@ -44,8 +44,8 @@ module World
 
     @initial_enemies.each do |enemy|
       Entities.prefab enemy.type do |entity|
-        entity.position[:x] = enemy.position.x
-        entity.position[:y] = enemy.position.y
+        entity.position.x = enemy.position.x
+        entity.position.y = enemy.position.y
       end
     end
   end

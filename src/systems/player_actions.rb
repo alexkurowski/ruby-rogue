@@ -33,11 +33,11 @@ end
 
 def move_entity entity, dx, dy
   if can_move? entity, dx, dy
-    entity.position[:x] += dx
-    entity.position[:y] += dy
+    entity.position.x += dx
+    entity.position.y += dy
 
-    entity.sprite[:dx] -= Display.cell_width  * dx
-    entity.sprite[:dy] -= Display.cell_height * dy
+    entity.sprite.dx -= Display.cell_width  * dx
+    entity.sprite.dy -= Display.cell_height * dy
 
     end_turn 1
   end
@@ -51,10 +51,10 @@ end
 
 
 def move_cursor entity, dx, dy
-  entity.player[:cx] += dx unless entity.player.cx + dx < Camera.x or
-                                  entity.player.cx + dx > Camera.x + Display.width - 1
-  entity.player[:cy] += dy unless entity.player.cy + dy < Camera.y or
-                                  entity.player.cy + dy > Camera.y + Display.height - 1
+  entity.player.cx += dx unless entity.player.cx + dx < Camera.x or
+                                entity.player.cx + dx > Camera.x + Display.width - 1
+  entity.player.cy += dy unless entity.player.cy + dy < Camera.y or
+                                entity.player.cy + dy > Camera.y + Display.height - 1
 end
 
 
@@ -64,7 +64,7 @@ def examine entity
     set_cursor_mode entity, :examine
 
   when :examine
-    entity.player[:mode] = :normal
+    entity.player.mode = :normal
   end
 end
 
@@ -76,15 +76,15 @@ def fire entity
 
   when :fire
     shoot entity
-    entity.player[:mode] = :normal
+    entity.player.mode = :normal
   end
 end
 
 
 def mouse_fire entity
   if entity.player.mode == :normal
-    entity.player[:cx] = Input.mouse_x + Camera.x
-    entity.player[:cy] = Input.mouse_y + Camera.y
+    entity.player.cx = Input.mouse_x + Camera.x
+    entity.player.cy = Input.mouse_y + Camera.y
     shoot entity
   end
 end
@@ -97,15 +97,15 @@ end
 
 
 def set_cursor_mode entity, mode
-  entity.player[:cx] = entity.position.x
-  entity.player[:cy] = entity.position.y
-  entity.player[:mode] = mode
+  entity.player.cx   = entity.position.x
+  entity.player.cy   = entity.position.y
+  entity.player.mode = mode
 end
 
 
 def cancel entity
-  entity.player[:mode] = :normal if entity.player.mode == :fire or
-                                    entity.player.mode == :examine
+  entity.player.mode = :normal if entity.player.mode == :fire or
+                                  entity.player.mode == :examine
 end
 
 

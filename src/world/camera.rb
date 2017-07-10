@@ -16,21 +16,21 @@ module Camera
   def self.update
     entity = World.player
 
-    @target[:x] = entity.position.x - Display.width  * 0.5 + 1
-    @target[:y] = entity.position.y - Display.height * 0.5 + 1
+    @target.x = entity.position.x - Display.width  * 0.5 + 1
+    @target.y = entity.position.y - Display.height * 0.5 + 1
 
     old_offset_x = @offset.x
     old_offset_y = @offset.y
 
-    @offset[:x] += (@target.x - @offset.x) * drag
-    @offset[:y] += (@target.y - @offset.y) * drag
+    @offset.x += (@target.x - @offset.x) * drag
+    @offset.y += (@target.y - @offset.y) * drag
 
     if ( @target.x - @offset.x ).abs <= min_difference
-      @offset[:x] = @target.x
+      @offset.x = @target.x
     end
 
     if ( @target.y - @offset.y ).abs <= min_difference
-      @offset[:y] = @target.y
+      @offset.y = @target.y
     end
 
     @dirty = @force_dirty ||
@@ -46,8 +46,8 @@ module Camera
 
 
   def self.jump_to x, y
-    @offset[:x] = @target[:x] = x - Display.width  * 0.5
-    @offset[:y] = @target[:y] = y - Display.height * 0.5
+    @offset.x = @target.x = x - Display.width  * 0.5
+    @offset.y = @target.y = y - Display.height * 0.5
   end
 
 

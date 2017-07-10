@@ -341,8 +341,7 @@ module Map::Generator::Ruins
     x = center.x + 1
     y = center.y + 1
 
-    World.player_x = x
-    World.player_y = y
+    World.initial_player_position = new_vector x, y
   end
 
 

@@ -16,7 +16,7 @@ module Fov
 
 
   def self.update
-    entity = Entities.find_by_component :player
+    entity = World.player
 
     @old_center[:x] = @center.x
     @old_center[:y] = @center.y

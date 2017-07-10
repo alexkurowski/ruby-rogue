@@ -1,7 +1,7 @@
 module World
 
-  global :player_x,
-         :player_y
+  global :player,
+         :initial_player_position
 
 
   def self.init
@@ -11,9 +11,11 @@ module World
     Fov.init
 
     Entities.prefab :player do |e|
-      e.position[:x] = @player_x.floor
-      e.position[:y] = @player_y.floor
+      e.position[:x] = @initial_player_position.x
+      e.position[:y] = @initial_player_position.y
       e.sprite[:char] = '@'
+
+      @player = e
 
       Camera.jump_to e.position.x, e.position.y - 10
     end
@@ -122,7 +124,7 @@ module World
   internal def self.render_ui
     Display.clear_ui
 
-    entity = Entities.find_by_component :player
+    entity = @player
 
     if entity.player.mode == :fire or
        entity.player.mode == :examine

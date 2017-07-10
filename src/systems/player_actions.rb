@@ -1,7 +1,7 @@
 def System.player_actions
   return unless Input.action
 
-  entity = Entities.find_by_component :player
+  entity = World.player
 
   case Input.action
   when :go_west       then move entity, -1,  0
@@ -59,9 +59,7 @@ end
 def examine entity
   case entity.player.mode
   when :normal
-    entity.player[:cx] = entity.position.x
-    entity.player[:cy] = entity.position.y
-    entity.player[:mode] = :examine
+    set_cursor_mode entity, :examine
 
   when :examine
     entity.player[:mode] = :normal
@@ -72,9 +70,7 @@ end
 def fire entity
   case entity.player.mode
   when :normal
-    entity.player[:cx] = entity.position.x
-    entity.player[:cy] = entity.position.y
-    entity.player[:mode] = :fire
+    set_cursor_mode entity, :fire
 
   when :fire
     shoot entity
@@ -95,6 +91,13 @@ end
 def shoot entity
   puts "PEW from #{entity.position.x}:#{entity.position.y} at #{entity.player.cx}:#{entity.player.cy}"
   Input.disable_for 1
+end
+
+
+def set_cursor_mode entity, mode
+  entity.player[:cx] = entity.position.x
+  entity.player[:cy] = entity.position.y
+  entity.player[:mode] = mode
 end
 
 

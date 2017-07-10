@@ -14,10 +14,10 @@ module Camera
 
 
   def self.update
-    entity = Entities.find_by_component :player
+    entity = World.player
 
-    @target[:x] = entity.position.x - Display.width  * 0.5
-    @target[:y] = entity.position.y - Display.height * 0.5
+    @target[:x] = entity.position.x - Display.width  * 0.5 + 1
+    @target[:y] = entity.position.y - Display.height * 0.5 + 1
 
     old_offset_x = @offset.x
     old_offset_y = @offset.y

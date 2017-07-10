@@ -31,7 +31,7 @@ end
 
 
 def move_entity entity, dx, dy
-  if can_move entity, dx, dy
+  if can_move? entity, dx, dy
     entity.position[:x] += dx
     entity.position[:y] += dy
 
@@ -43,8 +43,9 @@ def move_entity entity, dx, dy
 end
 
 
-def can_move entity, dx, dy
-  Map.can_walk? entity.position.x + dx, entity.position.y + dy
+def can_move? entity, dx, dy
+  Map.can_walk?(entity.position.x + dx, entity.position.y + dy) &&
+  Entities.find_at(entity.position.x + dx, entity.position.y + dy).nil?
 end
 
 

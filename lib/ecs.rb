@@ -62,6 +62,15 @@ module Entities
   end
 
 
+  def self.find_at x, y
+    @entity_list.find do |e|
+      next unless e.include? :position
+      return e if e.position.x == x and e.position.y == y
+    end
+    nil
+  end
+
+
   def self.filter_by_component component
     @entity_list.select do |e|
       e.include? component

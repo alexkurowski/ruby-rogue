@@ -362,8 +362,8 @@ module Map::Generator::Ruins
 
       type = :mob
       position = new_vector
-      position.x = random room.x1, room.x2
-      position.y = random room.y1, room.y2
+      position.x = random room.x1 + 1, room.x2 - 1
+      position.y = random room.y1 + 1, room.y2 - 1
 
       enemies << {
         type:     type,

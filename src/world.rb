@@ -1,6 +1,7 @@
 module World
 
   global :player,
+         :turn,
          :initial_player_position,
          :initial_enemies
 
@@ -14,8 +15,11 @@ module World
     place_player
     place_enemies
 
+    @turn = :player
+
     @active_systems = [
       :player_actions,
+      :ai_actions,
       :sprite_movement
     ]
   end

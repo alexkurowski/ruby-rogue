@@ -1,5 +1,6 @@
 def System.player_actions
   return unless Input.action
+  return unless World.turn == :player
 
   entity = World.player
 
@@ -38,7 +39,7 @@ def move_entity entity, dx, dy
     entity.sprite[:dx] -= Display.cell_width  * dx
     entity.sprite[:dy] -= Display.cell_height * dy
 
-    Input.disable_for 1
+    end_turn 1
   end
 end
 
@@ -91,7 +92,7 @@ end
 
 def shoot entity
   puts "PEW from #{entity.position.x}:#{entity.position.y} at #{entity.player.cx}:#{entity.player.cy}"
-  Input.disable_for 1
+  end_turn 1
 end
 
 
@@ -105,4 +106,10 @@ end
 def cancel entity
   entity.player[:mode] = :normal if entity.player.mode == :fire or
                                     entity.player.mode == :examine
+end
+
+
+def end_turn input_delay
+  World.turn = :enemy
+  Input.disable_for input_delay
 end

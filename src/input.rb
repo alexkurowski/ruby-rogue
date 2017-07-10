@@ -56,8 +56,7 @@ module Input
 
   internal def self.special_actions
     case @key
-    when TK_CLOSE,
-         TK_ESCAPE
+    when TK_CLOSE
       @quit = true
 
     when TK_KP_MINUS
@@ -77,18 +76,20 @@ module Input
 
   internal def self.convert_key
     case @key
-    when TK_LEFT  then 'h'
-    when TK_DOWN  then 'j'
-    when TK_UP    then 'k'
-    when TK_RIGHT then 'l'
-    when TK_KP_4  then 'h'
-    when TK_KP_2  then 'j'
-    when TK_KP_8  then 'k'
-    when TK_KP_6  then 'l'
-    when TK_KP_7  then 'y'
-    when TK_KP_9  then 'u'
-    when TK_KP_1  then 'b'
-    when TK_KP_3  then 'n'
+    when TK_LEFT        then 'h'
+    when TK_DOWN        then 'j'
+    when TK_UP          then 'k'
+    when TK_RIGHT       then 'l'
+    when TK_KP_4        then 'h'
+    when TK_KP_2        then 'j'
+    when TK_KP_8        then 'k'
+    when TK_KP_6        then 'l'
+    when TK_KP_7        then 'y'
+    when TK_KP_9        then 'u'
+    when TK_KP_1        then 'b'
+    when TK_KP_3        then 'n'
+    when TK_MOUSE_RIGHT then 'f!'
+    when TK_ESCAPE      then '^C'
     else @chr
     end
   end
@@ -96,14 +97,17 @@ module Input
 
   internal def self.interprete_chr
     case @chr
-    when 'h' then :go_west
-    when 'j' then :go_south
-    when 'k' then :go_north
-    when 'l' then :go_east
-    when 'y' then :go_north_west
-    when 'u' then :go_north_east
-    when 'b' then :go_south_west
-    when 'n' then :go_south_east
+    when 'h'  then :go_west
+    when 'j'  then :go_south
+    when 'k'  then :go_north
+    when 'l'  then :go_east
+    when 'y'  then :go_north_west
+    when 'u'  then :go_north_east
+    when 'b'  then :go_south_west
+    when 'n'  then :go_south_east
+    when 'f'  then :fire
+    when 'f!' then :fire!
+    when '^C' then :cancel
     else nil
     end
   end

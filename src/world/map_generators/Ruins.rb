@@ -14,7 +14,7 @@ module Map::Generator::Ruins
     @smoothing     = 1
     @filling       = 3
 
-    @pad   = 2
+    @pad   = 1
     @root  = new_node @pad, @pad, @width - @pad * 2, @height - @pad * 2
     @rooms = []
 
@@ -177,9 +177,9 @@ module Map::Generator::Ruins
       weight = 1
 
       if drunkard.x < goal.x
-        east += weight * 2
+        east += weight
       elsif drunkard.x > goal.x
-        west += weight * 2
+        west += weight
       elsif drunkard.y < goal.y
         south += weight
       elsif drunkard.y > goal.y

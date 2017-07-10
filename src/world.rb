@@ -110,23 +110,44 @@ module World
   end
 
 
-  internal def self.render_ui
-    Display.clear_ui
-    x     = Input.mouse_x
-    y     = Input.mouse_y
-    char  = '█'.ord
-    color = Terminal.color_from_name 'white'
-
-    Display.draw_ui x, y, char, color
-  end
-
-
   internal def self.entity_is_on_screen? entity
     not entity.sprite.char.empty? &&
     entity.position.x >= Camera.x &&
     entity.position.y >= Camera.y &&
     entity.position.x < Camera.x + Display.width &&
     entity.position.y < Camera.y + Display.height
+  end
+
+
+  internal def self.render_ui
+    Display.clear_ui
+
+    entity = Entities.find_by_component :player
+
+    if entity.player.mode == :fire
+    then draw_cursor entity
+    else draw_mouse_cursor
+    end
+  end
+
+
+  internal def self.draw_cursor entity
+    x     = entity.player.aim_x - Camera.x
+    y     = entity.player.aim_y - Camera.y
+    char  = '¿'.ord
+    color = Terminal.color_from_name 'white'
+
+    Display.draw_ui x, y, char, color
+  end
+
+
+  internal def self.draw_mouse_cursor
+    x     = Input.mouse_x
+    y     = Input.mouse_y
+    char  = '¿'.ord
+    color = Terminal.color_from_name 'white'
+
+    Display.draw_ui x, y, char, color
   end
 
 end

@@ -120,7 +120,7 @@ module World
         fov = Fov.at entity.position.x, entity.position.y
 
         next unless fov == :full or
-                    entity.include? :player
+                    entity.player?
 
         x     = entity.position.x - Camera.x
         y     = entity.position.y - Camera.y

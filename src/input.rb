@@ -105,6 +105,7 @@ module Input
     when 'u'  then :go_north_east
     when 'b'  then :go_south_west
     when 'n'  then :go_south_east
+    when 'x'  then :examine
     when 'f'  then :fire
     when 'f!' then :fire!
     when '^C' then :cancel

@@ -124,7 +124,8 @@ module World
 
     entity = Entities.find_by_component :player
 
-    if entity.player.mode == :fire
+    if entity.player.mode == :fire or
+       entity.player.mode == :examine
     then draw_cursor entity
     else draw_mouse_cursor
     end
@@ -132,8 +133,8 @@ module World
 
 
   internal def self.draw_cursor entity
-    x     = entity.player.aim_x - Camera.x
-    y     = entity.player.aim_y - Camera.y
+    x     = entity.player.cx - Camera.x
+    y     = entity.player.cy - Camera.y
     char  = '¿'.ord
     color = Terminal.color_from_name 'white'
 

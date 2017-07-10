@@ -12,6 +12,7 @@ def System.player_actions
   when :go_north_east then move entity, +1, -1
   when :go_south_west then move entity, -1, +1
   when :go_south_east then move entity, +1, +1
+  when :examine       then examine entity
   when :fire          then fire entity
   when :fire!         then mouse_fire entity
   when :cancel        then cancel entity
@@ -23,8 +24,8 @@ def move entity, dx, dy
   case entity.player.mode
   when :normal
     move_entity entity, dx, dy
-  when :fire
-    move_aim entity, dx, dy
+  when :fire, :examine
+    move_cursor entity, dx, dy
   end
 end
 
@@ -47,17 +48,32 @@ def can_move entity, dx, dy
 end
 
 
-def move_aim entity, dx, dy
-  entity.player[:aim_x] += dx
-  entity.player[:aim_y] += dy
+def move_cursor entity, dx, dy
+  entity.player[:cx] += dx unless entity.player.cx + dx < Camera.x or
+                                  entity.player.cx + dx > Camera.x + Display.width - 1
+  entity.player[:cy] += dy unless entity.player.cy + dy < Camera.y or
+                                  entity.player.cy + dy > Camera.y + Display.height - 1
+end
+
+
+def examine entity
+  case entity.player.mode
+  when :normal
+    entity.player[:cx] = entity.position.x
+    entity.player[:cy] = entity.position.y
+    entity.player[:mode] = :examine
+
+  when :examine
+    entity.player[:mode] = :normal
+  end
 end
 
 
 def fire entity
   case entity.player.mode
   when :normal
-    entity.player[:aim_x] = entity.position.x
-    entity.player[:aim_y] = entity.position.y
+    entity.player[:cx] = entity.position.x
+    entity.player[:cy] = entity.position.y
     entity.player[:mode] = :fire
 
   when :fire
@@ -69,19 +85,20 @@ end
 
 def mouse_fire entity
   if entity.player.mode == :normal
-    entity.player[:aim_x] = Input.mouse_x + Camera.x
-    entity.player[:aim_y] = Input.mouse_y + Camera.y
+    entity.player[:cx] = Input.mouse_x + Camera.x
+    entity.player[:cy] = Input.mouse_y + Camera.y
     shoot entity
   end
 end
 
 
 def shoot entity
-  puts "PEW from #{entity.position.x}:#{entity.position.y} at #{entity.player.aim_x}:#{entity.player.aim_y}"
+  puts "PEW from #{entity.position.x}:#{entity.position.y} at #{entity.player.cx}:#{entity.player.cy}"
   Input.disable_for 1
 end
 
 
 def cancel entity
-  entity.player[:mode] = :normal
+  entity.player[:mode] = :normal if entity.player.mode == :fire or
+                                    entity.player.mode == :examine
 end

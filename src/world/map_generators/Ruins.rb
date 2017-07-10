@@ -14,6 +14,9 @@ module Map::Generator::Ruins
     @smoothing     = 1
     @filling       = 3
 
+    @min_enemy_ratio = 0.4
+    @max_enemy_ratio = 0.8
+
     @pad   = 1
     @root  = new_node @pad, @pad, @width - @pad * 2, @height - @pad * 2
     @rooms = []
@@ -23,6 +26,7 @@ module Map::Generator::Ruins
     clean_up
     fill_with_walls
     place_player
+    place_enemies
     place_exit
     fix_wall_tiles
 
@@ -332,12 +336,9 @@ module Map::Generator::Ruins
 
 
   internal def self.place_player
-    node = if @level.odd?
-           then get_leftmost_room @root
-           else get_rightmost_room @root
-           end
+    @player_room = @rooms.sample
 
-    center = room_center node.room
+    center = room_center @player_room
     x = center.x + 1
     y = center.y + 1
 
@@ -345,8 +346,40 @@ module Map::Generator::Ruins
   end
 
 
+  internal def self.place_enemies
+    enemies  = []
+    room     = nil
+    type     = nil
+    position = nil
+
+    enemy_count = random @rooms.count * @min_enemy_ratio, @rooms.count * @max_enemy_ratio
+
+    enemy_count.floor.times do
+      loop do
+        room = @rooms.sample
+        break unless room == @player_room
+      end
+
+      type = :mob
+      position = new_vector
+      position[:x] = random room.x1, room.x2
+      position[:y] = random room.y1, room.y2
+
+      enemies << {
+        type:     type,
+        position: position
+      }
+    end
+
+    World.initial_enemies = enemies
+  end
+
+
   internal def self.place_exit
-    room = get_room @root
+    loop do
+      room = @rooms.sample
+      break unless room == @player_room
+    end
   end
 
 

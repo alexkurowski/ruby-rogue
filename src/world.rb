@@ -1,7 +1,8 @@
 module World
 
   global :player,
-         :initial_player_position
+         :initial_player_position,
+         :initial_enemies
 
 
   def self.init
@@ -10,20 +11,39 @@ module World
     Camera.init
     Fov.init
 
-    Entities.prefab :player do |e|
-      e.position[:x] = @initial_player_position.x
-      e.position[:y] = @initial_player_position.y
-      e.sprite[:char] = '@'
-
-      @player = e
-
-      Camera.jump_to e.position.x, e.position.y - 10
-    end
+    place_player
+    place_enemies
 
     @active_systems = [
       :player_actions,
       :sprite_movement
     ]
+  end
+
+
+  internal def self.place_player
+    return if @initial_player_position.nil?
+
+    Entities.prefab :player do |entity|
+      entity.position[:x]  = @initial_player_position.x
+      entity.position[:y]  = @initial_player_position.y
+
+      @player = entity
+
+      Camera.jump_to entity.position.x, entity.position.y - 10
+    end
+  end
+
+
+  internal def self.place_enemies
+    return if @initial_enemies.nil?
+
+    @initial_enemies.each do |enemy|
+      Entities.prefab enemy.type do |entity|
+        entity.position[:x] = enemy.position.x
+        entity.position[:y] = enemy.position.y
+      end
+    end
   end
 
 

@@ -17,11 +17,25 @@ module Entities
     yield e
 
     @entity_list << e
+
+    return e
   end
 
 
-  def self.prefab name, &block
-    add *@prefabs[name], &block
+  def self.prefab name
+    current_prefab = @prefabs[name]
+
+    components = current_prefab.map(&:first)
+
+    entity = add *components do |e|
+      current_prefab.each do |component, properties|
+        next if properties.nil?
+
+        e[component] = e[component].merge properties
+      end
+    end
+
+    yield entity
   end
 
 
@@ -68,7 +82,7 @@ module Entities
     @prefabs = {}
 
     PREFABS.entity_prefabs.each do |name, components|
-      @prefabs[name.to_sym] = components.map(&:to_sym)
+      @prefabs[name.to_sym] = components
     end
   end
 

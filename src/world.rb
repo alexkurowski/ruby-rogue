@@ -161,9 +161,10 @@ module World
     else draw_mouse_cursor
     end
 
-    # TODO: Add a global debug true/false value
-    Terminal.print 0, 0, "Player: #{entity.position.x}:#{entity.position.y}"
-    Terminal.print 0, 1, "Cursor: #{Input.mouse_x + Camera.x}:#{Input.mouse_y + Camera.y}"
+    if Game.debug
+      Terminal.print 0, 0, "Player: #{entity.position.x}:#{entity.position.y}"
+      Terminal.print 0, 1, "Cursor: #{Input.mouse_x + Camera.x}:#{Input.mouse_y + Camera.y}"
+    end
   end
 
 
@@ -180,16 +181,18 @@ module World
 
     line = Los.get_line_of_fire lof_opts
 
-    char = '¿'.ord
-    Terminal.color '#aaff0000'
-
-    # TODO: Move draw to Display module
-    line.each_with_index do |point, i|
-      next if point.x == entity.position.x and
-              point.y == entity.position.y
-      next if Fov.at(point.x, point.y) != :full
-      Terminal.put point.x - Camera.x, point.y - Camera.y, char
+    line = line.reject do |point|
+      Fov.at(point.x, point.y) != :full ||
+      point.x == entity.position.x &&
+      point.y == entity.position.y
+    end.map do |point|
+      { x: point.x - Camera.x, y: point.y - Camera.y }
     end
+
+    char  = '¿'.ord
+    color = '#aaff0000'
+
+    Display.draw_ui_set line, char, color
   end
 
 

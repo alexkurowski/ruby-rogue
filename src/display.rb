@@ -115,6 +115,16 @@ module Display
   end
 
 
+  def self.draw_ui_set set, char, color
+    Terminal.color color
+    char = char.ord if char.is_a? String
+
+    set.each do |point|
+      Terminal.put point.x, point.y, char
+    end
+  end
+
+
   def self.render_finish
     Terminal.refresh
   end

@@ -11,6 +11,7 @@ module World
     Entities.init
     Camera.init
     Fov.init
+    Los.init
 
     place_player
     place_enemies
@@ -150,10 +151,44 @@ module World
 
     entity = @player
 
+    if entity.player.mode == :fire
+      draw_line_of_fire entity
+    end
+
     if entity.player.mode == :fire or
        entity.player.mode == :examine
     then draw_cursor entity
     else draw_mouse_cursor
+    end
+
+    # TODO: Add a global debug true/false value
+    Terminal.print 0, 0, "Player: #{entity.position.x}:#{entity.position.y}"
+    Terminal.print 0, 1, "Cursor: #{Input.mouse_x + Camera.x}:#{Input.mouse_y + Camera.y}"
+  end
+
+
+  internal def self.draw_line_of_fire entity
+    lof_opts = {
+      x1: entity.position.x,
+      y1: entity.position.y,
+      x2: entity.player.cx,
+      y2: entity.player.cy,
+      radius: entity.creature.sight,
+      permissive: true,
+      ignore_player: true
+    }
+
+    line = Los.get_line_of_fire lof_opts
+
+    char = '¿'.ord
+    Terminal.color '#aaff0000'
+
+    # TODO: Move draw to Display module
+    line.each_with_index do |point, i|
+      next if point.x == entity.position.x and
+              point.y == entity.position.y
+      next if Fov.at(point.x, point.y) != :full
+      Terminal.put point.x - Camera.x, point.y - Camera.y, char
     end
   end
 

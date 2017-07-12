@@ -1,12 +1,18 @@
 entity_prefabs:
+
   player:
     :position:
     :player:
     :sprite:
       :char: '@'
+    :creature:
+      :sight: 20
+
 
   mob:
     :position:
     :sprite:
-      :char: 'T'
+      :char: 'M'
       :color: '#ffff8888'
+    :creature:
+      :sight: 16

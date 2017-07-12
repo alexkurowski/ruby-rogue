@@ -14,7 +14,3 @@ terminal_options:
 map_options:
   width: 256
   height: 256
-
-
-fov_options:
-  normal_radius: 20

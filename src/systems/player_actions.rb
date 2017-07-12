@@ -91,7 +91,40 @@ end
 
 
 def shoot entity
-  puts "PEW from #{entity.position.x}:#{entity.position.y} at #{entity.player.cx}:#{entity.player.cy}"
+  return if entity.player.cx == entity.position.x and
+            entity.player.cy == entity.position.y
+
+  lof_opts = {
+    x1: entity.position.x,
+    y1: entity.position.y,
+    x2: entity.player.cx,
+    y2: entity.player.cy,
+    radius: entity.creature.sight,
+    permissive: true,
+    ignore_player: true
+  }
+
+  line, target = Los.get_line_of_fire_and_target lof_opts
+
+  if target.nil?
+    x1 = line.first.x
+    y1 = line.first.y
+    x2 = line.last.x
+    y2 = line.last.y
+
+    puts "No mojo. Create a bullet from #{x1}:#{y1} to #{x2}:#{y2}"
+  else
+    x1 = line.first.x
+    y1 = line.first.y
+    x2 = line.last.x
+    y2 = line.last.y
+
+    direct = line.first.x == entity.position.x &&
+             line.first.y == entity.position.y
+
+    puts "#{direct ? 'Direct hit!' : 'Hit.'} Create a bullet from #{x1}:#{y1} to #{x2}:#{y2}"
+  end
+
   end_turn 1
 end
 

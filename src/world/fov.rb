@@ -1,10 +1,6 @@
 module Fov
 
   def self.init
-    opts = CONFIG.fov_options
-
-    set_radius opts.normal_radius
-
     @width      = Map.width
     @height     = Map.height
     @dirty      = true
@@ -33,12 +29,6 @@ module Fov
   end
 
 
-  def self.set_radius new_radius
-    @radius    = new_radius
-    @radius_sq = new_radius * new_radius
-  end
-
-
   def self.set_dirty
     @force_dirty = true
   end
@@ -54,75 +44,10 @@ module Fov
   end
 
 
-  def self.check_line x1, y1, x2, y2, radius = nil
-    radius ||= @radius
-
-    return false if x1 < 0 or x1 >= @width or
-                    y1 < 0 or y1 >= @height or
-                    x2 < 0 or x2 >= @width or
-                    y2 < 0 or y2 >= @height
-
-    distance = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)
-    return false if distance >= radius * radius
-
-    return true if x1 == x2 and y1 == y2
-
-    x_offset     = x2 - x1
-    y_offset     = y2 - y1
-    alt_x_offset = x_offset.abs
-    alt_y_offset = y_offset.abs
-
-    x_normal = ( x_offset == 0 ? 1 : x_offset / alt_x_offset ).round
-    y_normal = ( y_offset == 0 ? 1 : y_offset / alt_y_offset ).round
-
-    swapped_axis = false
-
-    if alt_x_offset < alt_y_offset
-      swapped_axis = true
-      alt_x_offset, alt_y_offset = alt_y_offset, alt_x_offset
-    end
-
-    x_unit = alt_x_offset / alt_x_offset.gcd(alt_y_offset)
-    y_unit = alt_y_offset / alt_x_offset.gcd(alt_y_offset)
-
-    x_unit = x_unit.round
-    y_unit = y_unit.round
-
-    for starting_eps in 0...x_unit.floor
-      eps        = starting_eps
-      x_relative = 0
-      y_relative = 0
-
-      alt_x_offset.floor.times do
-        eps += y_unit
-
-        if (eps >= x_unit)
-          eps        -= x_unit
-          x_relative += x_normal
-          y_relative += y_normal
-        else
-          if swapped_axis
-          then y_relative += y_normal
-          else x_relative += x_normal
-          end
-        end
-
-        break if blocked? x1 + x_relative, y1 + y_relative
-      end
-
-      if swapped_axis
-        return true if y_offset == y_relative
-      else
-        return true if x_offset == x_relative
-      end
-    end
-
-    return false
-  end
-
-
   internal def self.update_map
     return unless @dirty
+
+    @radius = World.player.creature.sight
 
     hide_old_fov
     calculate_new_fov
@@ -171,7 +96,7 @@ module Fov
   end
 
 
-  internal def self.check_quadrant dx, dy, extent_x, extent_y
+  internal def self.check_quadrant quad_factor_x, quad_factor_y, extent_x, extent_y
     active_views = []
     shallow_line = Line.new 0, 1, extent_x, 0
     steep_line   = Line.new 1, 0, 0, extent_y
@@ -188,7 +113,7 @@ module Fov
       while j <= max_j and view_index < active_views.size
         x = i - j
         y = j
-        visit_coord x, y, dx, dy, view_index, active_views
+        visit_coord x, y, quad_factor_x, quad_factor_y, view_index, active_views
         j += 1
       end
       i += 1
@@ -196,7 +121,7 @@ module Fov
   end
 
 
-  internal def self.visit_coord x, y, dx, dy, view_index, active_views
+  internal def self.visit_coord x, y, quad_factor_x, quad_factor_y, view_index, active_views
     # The top left and bottom right corners of the current coordinate
     top_left     = [x, y + 1]
     bottom_right = [x + 1, y]
@@ -215,13 +140,13 @@ module Fov
 
     # Current co-ord must be between the steep and shallow lines of the current view
     # The real quadrant co-ordinates:
-    real_x  = x * dx
-    real_y  = y * dy
+    real_x  = x * quad_factor_x
+    real_y  = y * quad_factor_y
     coord_x = @center.x + real_x
     coord_y = @center.y + real_y
 
     # Don't light tiles beyond circular radius specified
-    if real_x * real_x + real_y * real_y < @radius_sq
+    if real_x * real_x + real_y * real_y < @radius * @radius
       light coord_x, coord_y
     end
 

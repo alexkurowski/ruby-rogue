@@ -115,7 +115,7 @@ module World
     Entities.filter_by_components(
       :position,
       :sprite
-    ).each do |entity|
+    ).reverse_each do |entity|
       if entity_is_on_screen? entity
 
         fov = Fov.at entity.position.x, entity.position.y

@@ -5,6 +5,7 @@ entity_prefabs:
     :player:
     :sprite:
       :char: '@'
+      :color: '#ffffffff'
     :creature:
       :sight: 20
 

@@ -2,10 +2,12 @@ module System::NpcActions
   def self.run
     return unless World.turn == :npc
 
-    entities = Entities.filter_by_component :npc
+    entities = Entities.filter_by_components :npc, :creature
     player   = World.player
 
     entities.map do |entity|
+      next if entity.creature.dead
+
       zombie_ai entity, player if entity.creature?
     end
 
@@ -35,10 +37,16 @@ module System::NpcActions
     dy = player.position.y - entity.position.y
     distance = Math.sqrt dx * dx + dy * dy
 
-    dx = (dx / distance).round
-    dy = (dy / distance).round
+    if distance >= 2
+      dx = (dx / distance).round
+      dy = (dy / distance).round
 
-    move entity, dx, dy
+      move entity, dx, dy
+
+    else
+
+      attack entity, player
+    end
   end
 
 
@@ -68,5 +76,10 @@ module System::NpcActions
   def self.can_move? entity, dx, dy
     Map.can_walk?(entity.position.x + dx, entity.position.y + dy) &&
     Entities.find_at(entity.position.x + dx, entity.position.y + dy).nil?
+  end
+
+
+  def self.attack entity, player
+    puts "Monster attacks you"
   end
 end

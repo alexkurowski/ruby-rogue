@@ -47,8 +47,10 @@ module System::PcActions
 
 
   def self.can_move? entity, dx, dy
+    e = Entities.find_at(entity.position.x + dx, entity.position.y + dy)
+
     Map.can_walk?(entity.position.x + dx, entity.position.y + dy) &&
-    Entities.find_at(entity.position.x + dx, entity.position.y + dy).nil?
+    ( e.nil? || !e.position.blocking )
   end
 
 
@@ -118,6 +120,8 @@ module System::PcActions
       direct = line.first.x == entity.position.x &&
                line.first.y == entity.position.y
 
+      Combat.deal_damage entity, target
+
       puts "#{direct ? 'Direct hit!' : 'Hit.'} Create a bullet from #{x1}:#{y1} to #{x2}:#{y2}"
     end
 
@@ -140,13 +144,12 @@ module System::PcActions
 
   def self.wait
     end_turn 1
-
-    Camera.set_dirty
   end
 
 
   def self.end_turn input_delay
     World.turn = :npc
     Input.disable_for input_delay
+    Camera.set_dirty
   end
 end

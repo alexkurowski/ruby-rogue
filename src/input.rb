@@ -76,10 +76,10 @@ module Input
 
   internal def self.convert_key
     case @key
-    when TK_LEFT        then 'h'
+    when TK_LEFT        then shift?? 'y' : control?? 'b' : 'h'
     when TK_DOWN        then 'j'
     when TK_UP          then 'k'
-    when TK_RIGHT       then 'l'
+    when TK_RIGHT       then shift?? 'u' : control?? 'n' : 'l'
     when TK_KP_4        then 'h'
     when TK_KP_2        then 'j'
     when TK_KP_8        then 'k'

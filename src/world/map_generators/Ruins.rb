@@ -14,8 +14,8 @@ module Map::Generator::Ruins
     @smoothing     = 1
     @filling       = 3
 
-    @min_npc_ratio = 0.4
-    @max_npc_ratio = 0.8
+    @min_npc_ratio = 0.8
+    @max_npc_ratio = 1
 
     @pad   = 1
     @root  = new_node @pad, @pad, @width - @pad * 2, @height - @pad * 2

@@ -14,8 +14,8 @@ module Map::Generator::Ruins
     @smoothing     = 1
     @filling       = 3
 
-    @min_enemy_ratio = 0.4
-    @max_enemy_ratio = 0.8
+    @min_npc_ratio = 0.4
+    @max_npc_ratio = 0.8
 
     @pad   = 1
     @root  = new_node @pad, @pad, @width - @pad * 2, @height - @pad * 2
@@ -26,7 +26,7 @@ module Map::Generator::Ruins
     clean_up
     fill_with_walls
     place_player
-    place_enemies
+    place_npc
     place_exit
     fix_wall_tiles
 
@@ -342,19 +342,19 @@ module Map::Generator::Ruins
     x = center.x + 1
     y = center.y + 1
 
-    World.initial_player_position = new_vector x, y
+    World.initial_pc_state = new_vector x, y
   end
 
 
-  internal def self.place_enemies
-    enemies  = []
+  internal def self.place_npc
+    npc_list = []
     room     = nil
     type     = nil
     position = nil
 
-    enemy_count = random @rooms.count * @min_enemy_ratio, @rooms.count * @max_enemy_ratio
+    npc_count = random @rooms.count * @min_npc_ratio, @rooms.count * @max_npc_ratio
 
-    enemy_count.floor.times do
+    npc_count.floor.times do
       loop do
         room = @rooms.sample
         break unless room == @player_room
@@ -365,13 +365,13 @@ module Map::Generator::Ruins
       position.x = random room.x1 + 1, room.x2 - 1
       position.y = random room.y1 + 1, room.y2 - 1
 
-      enemies << {
+      npc_list << {
         type:     type,
         position: position
       }
     end
 
-    World.initial_enemies = enemies
+    World.initial_npc_state = npc_list
   end
 
 

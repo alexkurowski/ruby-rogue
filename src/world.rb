@@ -2,8 +2,8 @@ module World
 
   global :player,
          :turn,
-         :initial_player_position,
-         :initial_enemies
+         :initial_pc_state,
+         :initial_npc_state
 
 
   def self.init
@@ -14,24 +14,24 @@ module World
     Los.init
 
     place_player
-    place_enemies
+    place_npc
 
     @turn = :player
 
     @active_systems = [
-      :player_actions,
-      :ai_actions,
+      :pc_actions,
+      :npc_actions,
       :sprite_movement
     ]
   end
 
 
   internal def self.place_player
-    return if @initial_player_position.nil?
+    return if @initial_pc_state.nil?
 
     Entities.prefab :player do |entity|
-      entity.position.x = @initial_player_position.x
-      entity.position.y = @initial_player_position.y
+      entity.position.x = @initial_pc_state.x
+      entity.position.y = @initial_pc_state.y
 
       @player = entity
 
@@ -40,13 +40,13 @@ module World
   end
 
 
-  internal def self.place_enemies
-    return if @initial_enemies.nil?
+  internal def self.place_npc
+    return if @initial_npc_state.nil?
 
-    @initial_enemies.each do |enemy|
-      Entities.prefab enemy.type do |entity|
-        entity.position.x = enemy.position.x
-        entity.position.y = enemy.position.y
+    @initial_npc_state.each do |npc|
+      Entities.prefab npc.type do |entity|
+        entity.position.x = npc.position.x
+        entity.position.y = npc.position.y
       end
     end
   end
@@ -173,9 +173,7 @@ module World
       from: entity.position,
       to: entity.player.cursor,
       radius: entity.creature.sight
-    )
-
-    line = line.reject do |point|
+    ).reject do |point|
       Fov.at(point.x, point.y) != :full ||
       point.x == entity.position.x &&
       point.y == entity.position.y

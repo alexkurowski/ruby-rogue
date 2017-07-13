@@ -1,4 +1,4 @@
-def System.player_actions
+def System.pc_actions
   return unless Input.action
   return unless World.turn == :player
 
@@ -137,6 +137,6 @@ end
 
 
 def end_turn input_delay
-  World.turn = :enemy
+  World.turn = :npc
   Input.disable_for input_delay
 end

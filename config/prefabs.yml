@@ -11,6 +11,7 @@ entity_prefabs:
 
   mob:
     :position:
+    :npc:
     :sprite:
       :char: 'M'
       :color: '#ffff8888'

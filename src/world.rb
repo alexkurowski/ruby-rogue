@@ -169,17 +169,11 @@ module World
 
 
   internal def self.draw_line_of_fire entity
-    lof_opts = {
-      x1: entity.position.x,
-      y1: entity.position.y,
-      x2: entity.player.cx,
-      y2: entity.player.cy,
-      radius: entity.creature.sight,
-      permissive: true,
-      ignore_player: true
-    }
-
-    line = Los.get_line_of_fire lof_opts
+    line = Los.line_of_fire(
+      from: entity.position,
+      to: entity.player.cursor,
+      radius: entity.creature.sight
+    )
 
     line = line.reject do |point|
       Fov.at(point.x, point.y) != :full ||
@@ -197,8 +191,8 @@ module World
 
 
   internal def self.draw_cursor entity
-    x     = entity.player.cx - Camera.x
-    y     = entity.player.cy - Camera.y
+    x     = entity.player.cursor.x - Camera.x
+    y     = entity.player.cursor.y - Camera.y
     char  = '¿'.ord
     color = Terminal.color_from_name 'white'
 

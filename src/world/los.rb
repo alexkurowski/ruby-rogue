@@ -7,8 +7,6 @@ module Los
 
 
   def self.check_line x1, y1, x2, y2, radius:, permissive: false
-    radius ||= @radius
-
     return false if x1 < 0 or x1 >= @width or
                     y1 < 0 or y1 >= @height or
                     x2 < 0 or x2 >= @width or
@@ -118,23 +116,20 @@ module Los
   end
 
 
-  def self.get_line_of_fire opts
-    result, _ = get_line_of_fire_and_target opts
+  def self.line_of_fire from:, to:, radius:
+    result, _ = line_of_fire_and_target from: from, to: to, radius: radius
     return result
   end
 
 
-  def self.get_line_of_fire_and_target opts
-    # TODO: too many options! Maybe get rid of some
-    # in order to make calls of this method simpler
+  def self.line_of_fire_and_target from:, to:, radius:
+    permissive = from == World.player.position
+    @origin_position = from
 
-    x1             = opts.x1
-    y1             = opts.y1
-    x2             = opts.x2
-    y2             = opts.y2
-    radius         = opts.radius
-    permissive     = opts.permissive || false
-    @ignore_player = opts.ignore_player || false
+    x1 = from.x
+    y1 = from.y
+    x2 = to.x
+    y2 = to.y
 
     dx = x2 - x1
     dy = y2 - y1
@@ -253,7 +248,7 @@ module Los
       else
         entity = Entities.find_at point.x, point.y
         unless entity.nil?
-          next if @ignore_player and entity.player?
+          next if entity.position == @origin_position
           return entity, i
         end
       end

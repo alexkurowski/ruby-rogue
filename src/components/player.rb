@@ -1,7 +1,9 @@
 def Component.player
   {
     mode: :normal,
-    cx: 0,
-    cy: 0
+    cursor: {
+      x: 0,
+      y: 0
+    }
   }
 end

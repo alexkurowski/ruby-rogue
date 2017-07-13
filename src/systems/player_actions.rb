@@ -51,10 +51,10 @@ end
 
 
 def move_cursor entity, dx, dy
-  entity.player.cx += dx unless entity.player.cx + dx < Camera.x or
-                                entity.player.cx + dx > Camera.x + Display.width - 1
-  entity.player.cy += dy unless entity.player.cy + dy < Camera.y or
-                                entity.player.cy + dy > Camera.y + Display.height - 1
+  entity.player.cursor.x += dx unless entity.player.cursor.x + dx < Camera.x or
+                                      entity.player.cursor.x + dx > Camera.x + Display.width - 1
+  entity.player.cursor.y += dy unless entity.player.cursor.y + dy < Camera.y or
+                                      entity.player.cursor.y + dy > Camera.y + Display.height - 1
 end
 
 
@@ -83,28 +83,22 @@ end
 
 def mouse_fire entity
   if entity.player.mode == :normal
-    entity.player.cx = Input.mouse_x + Camera.x
-    entity.player.cy = Input.mouse_y + Camera.y
+    entity.player.cursor.x = Input.mouse_x + Camera.x
+    entity.player.cursor.y = Input.mouse_y + Camera.y
     shoot entity
   end
 end
 
 
 def shoot entity
-  return if entity.player.cx == entity.position.x and
-            entity.player.cy == entity.position.y
+  return if entity.player.cursor.x == entity.position.x and
+            entity.player.cursor.y == entity.position.y
 
-  lof_opts = {
-    x1: entity.position.x,
-    y1: entity.position.y,
-    x2: entity.player.cx,
-    y2: entity.player.cy,
-    radius: entity.creature.sight,
-    permissive: true,
-    ignore_player: true
-  }
-
-  line, target = Los.get_line_of_fire_and_target lof_opts
+  line, target = Los.line_of_fire_and_target(
+    from: entity.position,
+    to: entity.player.cursor,
+    radius: entity.creature.sight
+  )
 
   if target.nil?
     x1 = line.first.x
@@ -130,8 +124,8 @@ end
 
 
 def set_cursor_mode entity, mode
-  entity.player.cx   = entity.position.x
-  entity.player.cy   = entity.position.y
+  entity.player.cursor.x = entity.position.x
+  entity.player.cursor.y = entity.position.y
   entity.player.mode = mode
 end
 

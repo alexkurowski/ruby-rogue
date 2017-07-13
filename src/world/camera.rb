@@ -74,7 +74,7 @@ module Camera
   internal def self.drag
     if Display.big?
     then 1
-    else 0.5
+    else 0.1
     end
   end
 

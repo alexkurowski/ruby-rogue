@@ -6,7 +6,12 @@ module Los
   end
 
 
-  def self.check_line x1, y1, x2, y2, radius:, permissive: false
+  def self.check_line from:, to:, radius:, permissive: false
+    x1 = from.x
+    y1 = from.y
+    x2 = to.x
+    y2 = to.y
+
     return false if x1 < 0 or x1 >= @width or
                     y1 < 0 or y1 >= @height or
                     x2 < 0 or x2 >= @width or

@@ -88,6 +88,7 @@ module Input
     when TK_KP_9        then 'u'
     when TK_KP_1        then 'b'
     when TK_KP_3        then 'n'
+    when TK_KP_6        then '.'
     when TK_MOUSE_RIGHT then 'f!'
     when TK_ESCAPE      then '^C'
     else @chr
@@ -107,6 +108,7 @@ module Input
     when 'n'  then :go_south_east
     when 'x'  then :examine
     when 'f'  then :fire
+    when '.'  then :wait
     when 'f!' then :fire!
     when '^C' then :cancel
     else nil

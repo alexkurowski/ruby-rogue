@@ -19,9 +19,9 @@ module World
     @turn = :player
 
     @active_systems = [
-      :pc_actions,
-      :npc_actions,
-      :sprite_movement
+      System::PcActions,
+      System::NpcActions,
+      System::SpriteMovement
     ]
   end
 
@@ -54,7 +54,7 @@ module World
 
   def self.update
     @active_systems.each do |system_name|
-      System.send system_name
+      system_name.send :run
     end
   end
 

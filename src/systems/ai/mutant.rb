@@ -1,4 +1,4 @@
-module System::AI::Zombie
+module System::AI::Mutant
 
   def self.ai entity
     player = World.player
@@ -50,7 +50,8 @@ module System::AI::Zombie
 
 
   def self.attack entity, player
-    puts "Monster attacks you"
+    name = self.name.split(':').last.capitalize
+    puts "#{name} attacks you"
   end
 
 end

@@ -361,7 +361,7 @@ module Map::Generator::Ruins
         break unless room == @player_room
       end
 
-      type = :mob
+      type = :mutant
       position = Vector.new
       position.x = random room.x1 + 1, room.x2 - 1
       position.y = random room.y1 + 1, room.y2 - 1

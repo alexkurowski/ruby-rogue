@@ -13,8 +13,9 @@ entity_prefabs:
       sight: 20
 
 
-  mob:
+  mutant:
     npc:
+      ai: mutant
     sprite:
       char: 'M'
       color: '#ffff8888'

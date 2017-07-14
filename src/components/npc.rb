@@ -1,2 +1,3 @@
 Component.new :npc,
-  hostile: false
+  hostile: false,
+  ai:      nil

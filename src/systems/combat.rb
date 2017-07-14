@@ -1,5 +1,47 @@
 module System::Combat
 
+  def self.kick entity, target
+    deal_damage entity, target
+  end
+
+
+  def self.kick_at entity, target_point
+    target = Entities.find_at target_point
+
+    deal_damage entity, target
+  end
+
+
+  def self.shoot_at entity, target_point
+    line, target = Los.line_of_fire_and_target(
+      from: entity.position,
+      to: target_point,
+      radius: entity.creature.sight
+    )
+
+    if target.nil?
+      x1 = line.first.x
+      y1 = line.first.y
+      x2 = line.last.x
+      y2 = line.last.y
+
+      puts "No mojo. Create a bullet from #{x1}:#{y1} to #{x2}:#{y2}"
+    else
+      x1 = line.first.x
+      y1 = line.first.y
+      x2 = line.last.x
+      y2 = line.last.y
+
+      direct = line.first.x == entity.position.x &&
+               line.first.y == entity.position.y
+
+      deal_damage entity, target
+
+      puts "#{direct ? 'Direct hit!' : 'Hit.'} Create a bullet from #{x1}:#{y1} to #{x2}:#{y2}"
+    end
+  end
+
+
   def self.deal_damage entity, target
     return if not entity.creature? or not target.creature?
 

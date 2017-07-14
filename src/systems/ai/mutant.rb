@@ -9,7 +9,7 @@ module System::AI::Mutant
       radius: entity.creature.sight
     )
 
-    entity.npc.hostile = los
+    entity.npc.hostile = !player.creature.dead && los
 
     if entity.npc.hostile
       follow entity, player
@@ -19,7 +19,7 @@ module System::AI::Mutant
   end
 
 
-  def self.follow entity, player
+  internal def self.follow entity, player
     dx = player.position.x - entity.position.x
     dy = player.position.y - entity.position.y
     distance = Math.sqrt dx * dx + dy * dy
@@ -38,7 +38,7 @@ module System::AI::Mutant
   end
 
 
-  def self.wander entity, player
+  internal def self.wander entity, player
     return if rand < 0.5
 
     dx = random -1, 2
@@ -49,9 +49,8 @@ module System::AI::Mutant
   end
 
 
-  def self.attack entity, player
-    name = self.name.split(':').last.capitalize
-    puts "#{name} attacks you"
+  internal def self.attack entity, player
+    System::Combat.kick entity, player
   end
 
 end

@@ -1,4 +1,4 @@
-module Combat
+module System::Combat
 
   def self.deal_damage entity, target
     return if not entity.creature? or not target.creature?

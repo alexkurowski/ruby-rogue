@@ -114,7 +114,7 @@ module System::PcActions
       direct = line.first.x == entity.position.x &&
                line.first.y == entity.position.y
 
-      Combat.deal_damage entity, target
+      System::Combat.deal_damage entity, target
 
       puts "#{direct ? 'Direct hit!' : 'Hit.'} Create a bullet from #{x1}:#{y1} to #{x2}:#{y2}"
     end

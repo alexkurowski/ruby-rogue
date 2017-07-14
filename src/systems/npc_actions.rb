@@ -74,8 +74,10 @@ module System::NpcActions
 
 
   def self.can_move? entity, dx, dy
+    e = Entities.find_at(entity.position.x + dx, entity.position.y + dy)
+
     Map.can_walk?(entity.position.x + dx, entity.position.y + dy) &&
-    Entities.find_at(entity.position.x + dx, entity.position.y + dy).nil?
+    ( e.nil? || !e.position.blocking )
   end
 
 

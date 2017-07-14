@@ -89,6 +89,12 @@ module Entities
   end
 
 
+  def self.send_back entity
+    @entity_list.delete entity
+    @entity_list.push entity
+  end
+
+
   internal def self.build_prefabs
     @prefabs = {}
 

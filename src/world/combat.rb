@@ -28,6 +28,8 @@ module Combat
     target.creature.dead = true
     target.sprite.color = "#80#{target.sprite.color[3..-1]}"
     target.position.blocking = false
+
+    Entities.send_back target
   end
 
 end

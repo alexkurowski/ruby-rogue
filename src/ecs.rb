@@ -1,6 +1,8 @@
 module Entities
 
   def self.init
+    Entity.class_eval { attr_accessor *Component.list }
+
     @entity_list = []
 
     build_prefabs
@@ -11,7 +13,7 @@ module Entities
     e = Entity.new
 
     components.each do |component|
-      e.send "#{component}=", Object.const_get('Component').const_get(component.capitalize).new
+      e.set component, Object.const_get('Component').const_get(component.capitalize).new
     end
 
     yield e
@@ -29,11 +31,9 @@ module Entities
 
     entity = add *components do |e|
       current_prefab.each do |component, properties|
-        next if properties.nil?
-
-        properties.each do |prop_key, prop_value|
-          e.send(component).send("#{prop_key}=", prop_value)
-        end
+        properties.each do |property_key, property_value|
+          e.get(component).send "#{property_key}=", property_value
+        end unless properties.nil?
       end
     end
 
@@ -89,7 +89,7 @@ module Entities
   end
 
 
-  private_class_method def self.build_prefabs
+  internal def self.build_prefabs
     @prefabs = {}
 
     PREFABS.entity_prefabs.each do |name, components|
@@ -102,27 +102,41 @@ end
 
 class Entity
 
-  attr_accessor(
-    :creature,
-    :npc,
-    :player,
-    :position,
-    :sprite
-  )
+  def get component
+    send component
+  end
+
+
+  def set component, value
+    send "#{component}=", value
+  end
 
 
   def include? component
     !send(component).nil?
   end
 
+
   def method_missing method
     if method[-1] == '?'
-      include? method[0...-1]
+      return include? method[0...-1]
     end
+
+    raise NoMethodError, "method '#{method}' is not found"
   end
 
 end
 
 
-module Component; end
+module Component
+
+  def self.list
+    constants.collect { |c| const_get(c) }
+             .select  { |c| c.instance_of?(Class) }
+             .map     { |c| c.name.split(':').last.downcase.to_sym }
+  end
+
+end
+
+
 module System; end

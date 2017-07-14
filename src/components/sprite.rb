@@ -4,8 +4,8 @@ class Component::Sprite
 
 
   def initialize
-    @char = ' '
-    @color = '#ffffffff'
+    @char   = ' '
+    @color  = '#ffffffff'
     @offset = Vector.new
   end
 

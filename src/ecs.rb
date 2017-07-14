@@ -136,6 +136,21 @@ module Component
              .map     { |c| c.name.split(':').last.downcase.to_sym }
   end
 
+
+  def self.new component, values
+    klass = const_set component.capitalize, Class.new
+
+    klass.class_eval do
+      attr_accessor *values.keys
+
+      define_method :initialize do
+        values.each do |key, value|
+          send "#{key}=", value
+        end
+      end
+    end
+  end
+
 end
 
 

@@ -183,7 +183,7 @@ module World
       point.x == entity.position.x &&
       point.y == entity.position.y
     end.map do |point|
-      { x: point.x - Camera.x, y: point.y - Camera.y }
+      Vector.new point.x - Camera.x, point.y - Camera.y
     end
 
     char  = '¿'.ord

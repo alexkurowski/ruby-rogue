@@ -138,9 +138,7 @@ end
 
 class Entity
 
-  def get component
-    send component
-  end
+  alias get send
 
 
   def set component, value
@@ -167,14 +165,14 @@ end
 module Component
 
   def self.list
-    constants.collect { |c| const_get(c) }
-             .select  { |c| c.instance_of?(Class) }
+    constants.collect { |c| const_get c }
+             .select  { |c| c.instance_of? Class }
              .map     { |c| c.name.split(':').last.downcase.to_sym }
   end
 
 
-  def self.new component, values
-    klass = const_set component.capitalize, Class.new
+  def self.new component_name, values
+    klass = const_set component_name.capitalize, Class.new
 
     klass.class_eval do
       attr_accessor *values.keys

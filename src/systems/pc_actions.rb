@@ -43,10 +43,10 @@ module System::PcActions
 
 
   internal def self.move_cursor entity, dx, dy
-    entity.player.cursor.x += dx unless entity.player.cursor.x + dx < Camera.x or
-                                        entity.player.cursor.x + dx > Camera.x + Display.width - 1
-    entity.player.cursor.y += dy unless entity.player.cursor.y + dy < Camera.y or
-                                        entity.player.cursor.y + dy > Camera.y + Display.height - 1
+    entity.player.cursor.x += dx unless entity.player.cursor.x + dx < Camera.position.x or
+                                        entity.player.cursor.x + dx > Camera.position.x + Display.width - 1
+    entity.player.cursor.y += dy unless entity.player.cursor.y + dy < Camera.position.y or
+                                        entity.player.cursor.y + dy > Camera.position.y + Display.height - 1
   end
 
 

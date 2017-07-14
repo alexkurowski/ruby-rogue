@@ -1,19 +1,16 @@
 module Camera
 
-  global :x,
-         :y,
-         :dx,
-         :dy
+  global :position,
+         :offset
 
 
   def self.init
-    @x      = 0
-    @y      = 0
-    @dx     = 0
-    @dy     = 0
-    @dirty  = true
-    @offset = Vector.new
+    @position = Vector.new
+    @offset   = Vector.new
+
+    @coords = Vector.new
     @target = Vector.new
+    @dirty  = true
   end
 
 
@@ -23,35 +20,30 @@ module Camera
     @target.x = entity.position.x - Display.width  * 0.5 + 1
     @target.y = entity.position.y - Display.height * 0.5 + 1
 
-    old_offset_x = @offset.x
+    old_offset_x = @coords.x
     old_offset_y = @offset.y
 
-    @offset.x += (@target.x - @offset.x) * drag
-    @offset.y += (@target.y - @offset.y) * drag
+    @coords.x += (@target.x - @coords.x) * drag
+    @coords.y += (@target.y - @coords.y) * drag
 
-    if ( @target.x - @offset.x ).abs <= min_difference
-      @offset.x = @target.x
-    end
-
-    if ( @target.y - @offset.y ).abs <= min_difference
-      @offset.y = @target.y
-    end
+    @coords.x = @target.x if ( @target.x - @coords.x ).abs <= min_difference
+    @coords.y = @target.y if ( @target.y - @coords.y ).abs <= min_difference
 
     @dirty = @force_dirty ||
-             @offset.x != old_offset_x ||
-             @offset.y != old_offset_y
+             @coords.x != old_offset_x ||
+             @coords.y != old_offset_y
     @force_dirty = false
 
-    @x  = @target.x.floor
-    @y  = @target.y.floor
-    @dx = ( @offset.x - @target.x ) * Display.cell_width
-    @dy = ( @offset.y - @target.y ) * Display.cell_height
+    @position.x = @target.x.floor
+    @position.y = @target.y.floor
+    @offset.x = ( @coords.x - @target.x ) * Display.cell_width
+    @offset.y = ( @coords.y - @target.y ) * Display.cell_height
   end
 
 
   def self.jump_to x, y
-    @offset.x = @target.x = x - Display.width  * 0.5 + 1
-    @offset.y = @target.y = y - Display.height * 0.5 + 1
+    @coords.x = @target.x = x - Display.width  * 0.5 + 1
+    @coords.y = @target.y = y - Display.height * 0.5 + 1
   end
 
 

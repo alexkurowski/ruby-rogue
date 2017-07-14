@@ -23,9 +23,7 @@ module Display
     @font_size     = opts.font_size
     @min_font_size = opts.min_font_size
     @max_font_size = opts.max_font_size
-
     @background    = Terminal.color_from_argb 255, 6, 8, 14
-    @tiles_output  = ''
 
     @layers = {
       tiles:    0,
@@ -54,11 +52,6 @@ module Display
   end
 
 
-  def self.render_start
-    @tiles_output = ''
-  end
-
-
   def self.clear_tiles
     Terminal.layer @layers.tiles
     Terminal.bkcolor @background
@@ -77,45 +70,42 @@ module Display
   end
 
 
-  def self.set_tile_offset dx, dy
-    @tiles_output << "[offset=#{ dx },#{ dy }]"
+  def self.print_offset dx, dy
+    "[offset=#{ dx },#{ dy }]"
   end
 
 
-  def self.add_tile char, color
-    @tiles_output << "[color=##{ color }]"
-    @tiles_output << char
+  def self.print_color color
+    "[color=##{ color }]"
   end
 
 
-  def self.add_empty_tile
-    @tiles_output << ' '
+  def self.print string
+    Terminal.print 0, 0, string
   end
 
 
-  def self.add_newline_tile
-    @tiles_output << "\n"
+  def self.draw char, color, position, offset = nil
+    if offset.nil?
+    then put char, color, position
+    else put_ext char, color, position, offset
+    end
   end
 
 
-  def self.draw_tiles
-    Terminal.print 0, 0, @tiles_output
-  end
-
-
-  def self.draw_entity x, y, dx, dy, char, color
+  def self.put char, color, position
     Terminal.color color
-    Terminal.put_ext x, y, dx, dy, char
+    Terminal.put position.x, position.y, char
   end
 
 
-  def self.draw_ui x, y, char, color
+  def self.put_ext char, color, position, offset
     Terminal.color color
-    Terminal.put x, y, char
+    Terminal.put_ext position.x, position.y, offset.x, offset.y, char
   end
 
 
-  def self.draw_ui_set set, char, color
+  def self.draw_set set, char, color
     Terminal.color color
     char = char.ord if char.is_a? String
 
@@ -125,7 +115,7 @@ module Display
   end
 
 
-  def self.render_finish
+  def self.refresh
     Terminal.refresh
   end
 

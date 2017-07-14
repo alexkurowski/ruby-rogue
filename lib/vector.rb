@@ -5,10 +5,10 @@ class Vector < Struct.new :x, :y
     self.y = _y
   end
 
-  def + v; Vector.new self.x + v.x, self.y + vy end
-  def - v; Vector.new self.x - v.x, self.y - vy end
-  def * v; Vector.new self.x * v.x, self.y * vy end
-  def / v; Vector.new self.x / v.x, self.y / vy end
+  def + v; Vector.new self.x + v.x, self.y + v.y end
+  def - v; Vector.new self.x - v.x, self.y - v.y end
+  def * v; Vector.new self.x * v.x, self.y * v.y end
+  def / v; Vector.new self.x / v.x, self.y / v.y end
 
   def magnitude
     Math.sqrt self.x * self.x + self.y * self.y

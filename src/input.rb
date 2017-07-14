@@ -21,8 +21,8 @@ module Input
 
     @mouse.x  = Terminal.state TK_MOUSE_X
     @mouse.y  = Terminal.state TK_MOUSE_Y
-    @cursor.x = @mouse.x + Camera.x
-    @cursor.y = @mouse.y + Camera.y
+    @cursor.x = @mouse.x + Camera.position.x
+    @cursor.y = @mouse.y + Camera.position.y
 
     return unless Terminal.has_input?
 

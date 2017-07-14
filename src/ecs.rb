@@ -5,6 +5,7 @@ module Entities
 
     @entity_list = []
 
+    build_requires
     build_prefabs
   end
 
@@ -12,8 +13,12 @@ module Entities
   def self.add *components
     e = Entity.new
 
+    @requires.each do |component|
+      add_component e, component
+    end
+
     components.each do |component|
-      e.set component, Object.const_get('Component').const_get(component.capitalize).new
+      add_component e, component
     end
 
     yield e
@@ -21,6 +26,11 @@ module Entities
     @entity_list << e
 
     return e
+  end
+
+
+  def self.add_component entity, component
+    entity.set component, Object.const_get('Component').const_get(component.capitalize).new
   end
 
 
@@ -64,10 +74,21 @@ module Entities
   end
 
 
-  def self.find_at x, y
+  def self.find_at x, y = nil
+    return find_at_vector x if y.nil?
+
     @entity_list.find do |e|
       next unless e.include? :position
       return e if e.position.x == x and e.position.y == y
+    end
+    nil
+  end
+
+
+  def self.find_at_vector v
+    @entity_list.find do |e|
+      next unless e.include? :position
+      return e if e.position.x == v.x and e.position.y == v.y
     end
     nil
   end
@@ -92,6 +113,15 @@ module Entities
   def self.send_back entity
     @entity_list.delete entity
     @entity_list.push entity
+  end
+
+
+  internal def self.build_requires
+    @requires = []
+
+    PREFABS.required_components.each do |component|
+      @requires << component
+    end
   end
 
 

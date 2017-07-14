@@ -1,11 +1,10 @@
-entity_require:
+required_components:
   - position
 
 
 entity_prefabs:
 
   player:
-    position:
     player:
     sprite:
       char: '@'
@@ -15,7 +14,6 @@ entity_prefabs:
 
 
   mob:
-    position:
     npc:
     sprite:
       char: 'M'

@@ -251,9 +251,10 @@ module Los
       if blocked? point.x, point.y, false
         return nil, i
       else
-        entity = Entities.find_at point.x, point.y
+        entity = Entities.find_at point
         unless entity.nil?
-          next if entity.position == @origin_position
+          next if entity.position == @origin_position or
+                  not entity.position.blocking
           return entity, i
         end
       end

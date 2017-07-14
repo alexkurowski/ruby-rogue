@@ -209,9 +209,9 @@ module Los
     end
     for x in x1..x2
       if steep
-        points << new_vector(y, x)
+        points << Vector.new(y, x)
       else
-        points << new_vector(x, y)
+        points << Vector.new(x, y)
       end
       error -= dy
       if error < 0

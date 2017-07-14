@@ -125,8 +125,8 @@ module World
 
         x     = entity.position.x - Camera.x
         y     = entity.position.y - Camera.y
-        dx    = entity.sprite.dx - Camera.dx
-        dy    = entity.sprite.dy - Camera.dy
+        dx    = entity.sprite.offset.x - Camera.dx
+        dy    = entity.sprite.offset.y - Camera.dy
         char  = entity.sprite.char.ord
         color = entity.sprite.color
 

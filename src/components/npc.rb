@@ -1,5 +1,5 @@
-def Component.npc
-  {
-    hostile: false
-  }
+class Component::Npc
+
+  attr_accessor :hostile
+
 end

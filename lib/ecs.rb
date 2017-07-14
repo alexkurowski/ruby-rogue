@@ -8,10 +8,10 @@ module Entities
 
 
   def self.add *components
-    e = {}
+    e = Entity.new
 
     components.each do |component|
-      e[component] = Component.send component
+      e.send "#{component}=", Object.const_get('Component').const_get(component.capitalize).new
     end
 
     yield e
@@ -31,7 +31,9 @@ module Entities
       current_prefab.each do |component, properties|
         next if properties.nil?
 
-        e[component] = e[component].merge properties
+        properties.each do |prop_key, prop_value|
+          e.send(component).send("#{prop_key}=", prop_value)
+        end
       end
     end
 
@@ -92,6 +94,30 @@ module Entities
 
     PREFABS.entity_prefabs.each do |name, components|
       @prefabs[name.to_sym] = components
+    end
+  end
+
+end
+
+
+class Entity
+
+  attr_accessor(
+    :creature,
+    :npc,
+    :player,
+    :position,
+    :sprite
+  )
+
+
+  def include? component
+    !send(component).nil?
+  end
+
+  def method_missing method
+    if method[-1] == '?'
+      include? method[0...-1]
     end
   end
 

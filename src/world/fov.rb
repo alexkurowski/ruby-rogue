@@ -4,8 +4,8 @@ module Fov
     @width      = Map.width
     @height     = Map.height
     @dirty      = true
-    @center     = new_vector
-    @old_center = new_vector
+    @center     = Vector.new
+    @old_center = Vector.new
 
     @map = Array.new(@width) { Array.new(@height) { :none } }
   end

@@ -8,8 +8,8 @@ module Camera
 
   def self.init
     @dirty  = true
-    @offset = new_vector
-    @target = new_vector
+    @offset = Vector.new
+    @target = Vector.new
   end
 
 

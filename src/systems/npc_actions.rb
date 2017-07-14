@@ -63,12 +63,12 @@ module System::NpcActions
   def self.move entity, dx, dy
     if can_move? entity, dx, 0
       entity.position.x += dx
-      entity.sprite.dx -= Display.cell_width * dx
+      entity.sprite.offset.x -= Display.cell_width * dx
     end
 
     if can_move? entity, 0, dy
       entity.position.y += dy
-      entity.sprite.dy -= Display.cell_height * dy
+      entity.sprite.offset.y -= Display.cell_height * dy
     end
   end
 

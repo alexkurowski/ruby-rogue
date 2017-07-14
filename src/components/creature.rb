@@ -1,9 +1,12 @@
-def Component.creature
-  {
-    hp: 1,
-    dead: false,
+class Component::Creature
 
-    strength: 1,
-    sight: 16
-  }
+  attr_accessor :hp, :dead, :sight
+
+
+  def initialize
+    @hp    = 1
+    @dead  = false
+    @sight = 16
+  end
+
 end

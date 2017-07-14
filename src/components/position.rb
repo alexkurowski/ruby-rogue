@@ -1,7 +1,12 @@
-def Component.position
-  {
-    x: 0,
-    y: 0,
-    blocking: true
-  }
+class Component::Position
+
+  attr_accessor :x, :y, :blocking
+
+
+  def initialize
+    @x = 0
+    @y = 0
+    @blocking = true
+  end
+
 end

@@ -1,20 +1,24 @@
+entity_require:
+  - position
+
+
 entity_prefabs:
 
   player:
-    :position:
-    :player:
-    :sprite:
+    position:
+    player:
+    sprite:
       :char: '@'
       :color: '#ffffffff'
-    :creature:
+    creature:
       :sight: 20
 
 
   mob:
-    :position:
-    :npc:
-    :sprite:
+    position:
+    npc:
+    sprite:
       :char: 'M'
       :color: '#ffff8888'
-    :creature:
+    creature:
       :sight: 16

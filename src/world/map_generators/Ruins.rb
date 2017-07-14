@@ -14,8 +14,8 @@ module Map::Generator::Ruins
     @smoothing     = 1
     @filling       = 3
 
-    @min_npc_ratio = 0.8
-    @max_npc_ratio = 1
+    @min_npc_ratio = 4
+    @max_npc_ratio = 8
 
     @pad   = 1
     @root  = new_node @pad, @pad, @width - @pad * 2, @height - @pad * 2
@@ -342,7 +342,7 @@ module Map::Generator::Ruins
     x = center.x + 1
     y = center.y + 1
 
-    World.initial_pc_state = new_vector x, y
+    World.initial_pc_state = Vector.new x, y
   end
 
 
@@ -353,6 +353,7 @@ module Map::Generator::Ruins
     position = nil
 
     npc_count = random @rooms.count * @min_npc_ratio, @rooms.count * @max_npc_ratio
+    puts "npc_count: #{npc_count}"
 
     npc_count.floor.times do
       loop do
@@ -361,7 +362,7 @@ module Map::Generator::Ruins
       end
 
       type = :mob
-      position = new_vector
+      position = Vector.new
       position.x = random room.x1 + 1, room.x2 - 1
       position.y = random room.y1 + 1, room.y2 - 1
 

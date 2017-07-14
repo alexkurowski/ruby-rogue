@@ -1,8 +1,12 @@
-def Component.sprite
-  {
-    dx: 0,
-    dy: 0,
-    char: ' ',
-    color: '#ffffffff'
-  }
+class Component::Sprite
+
+  attr_accessor :char, :color, :offset
+
+
+  def initialize
+    @char = ' '
+    @color = '#ffffffff'
+    @offset = Vector.new
+  end
+
 end

@@ -3,7 +3,7 @@ module Combat
   def self.deal_damage entity, target
     return if not entity.creature? or not target.creature?
 
-    target.creature.hp -= entity.creature.strength
+    target.creature.hp -= 1
 
     die entity, target if target.creature.hp <= 0
   end
@@ -21,8 +21,8 @@ module Combat
     if Map.can_walk? target.position.x - dx, target.position.y - dy
       target.position.x -= dx
       target.position.y -= dy
-      target.sprite.dx += Display.cell_width  * dx
-      target.sprite.dy += Display.cell_height * dy
+      target.sprite.offset.x += Display.cell_width  * dx
+      target.sprite.offset.y += Display.cell_height * dy
     end
 
     target.creature.dead = true

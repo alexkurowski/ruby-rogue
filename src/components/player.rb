@@ -1,9 +1,11 @@
-def Component.player
-  {
-    mode: :normal,
-    cursor: {
-      x: 0,
-      y: 0
-    }
-  }
+class Component::Player
+
+  attr_accessor :mode, :cursor
+
+
+  def initialize
+    @mode   = :normal
+    @cursor = Vector.new
+  end
+
 end

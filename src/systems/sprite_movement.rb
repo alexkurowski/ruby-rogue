@@ -3,20 +3,20 @@ module System::SpriteMovement
     entities = Entities.filter_by_component :sprite
 
     entities.each do |entity|
-      if entity.sprite.dx.abs > min_difference
-        entity.sprite.dx *= drag
+      if entity.sprite.offset.x.abs > min_difference
+        entity.sprite.offset.x *= drag
       end
 
-      if entity.sprite.dy.abs > min_difference
-        entity.sprite.dy *= drag
+      if entity.sprite.offset.y.abs > min_difference
+        entity.sprite.offset.y *= drag
       end
 
-      if entity.sprite.dx.abs <= min_difference
-        entity.sprite.dx = 0
+      if entity.sprite.offset.x.abs <= min_difference
+        entity.sprite.offset.x = 0
       end
 
-      if entity.sprite.dy.abs <= min_difference
-        entity.sprite.dy = 0
+      if entity.sprite.offset.y.abs <= min_difference
+        entity.sprite.offset.y = 0
       end
     end
   end

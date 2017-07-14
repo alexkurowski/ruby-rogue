@@ -38,8 +38,8 @@ module System::PcActions
       entity.position.x += dx
       entity.position.y += dy
 
-      entity.sprite.dx -= Display.cell_width  * dx
-      entity.sprite.dy -= Display.cell_height * dy
+      entity.sprite.offset.x -= Display.cell_width  * dx
+      entity.sprite.offset.y -= Display.cell_height * dy
 
       end_turn 1
     end

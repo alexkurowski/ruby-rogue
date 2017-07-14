@@ -7,6 +7,10 @@ module Camera
 
 
   def self.init
+    @x      = 0
+    @y      = 0
+    @dx     = 0
+    @dy     = 0
     @dirty  = true
     @offset = Vector.new
     @target = Vector.new
@@ -46,8 +50,8 @@ module Camera
 
 
   def self.jump_to x, y
-    @offset.x = @target.x = x - Display.width  * 0.5
-    @offset.y = @target.y = y - Display.height * 0.5
+    @offset.x = @target.x = x - Display.width  * 0.5 + 1
+    @offset.y = @target.y = y - Display.height * 0.5 + 1
   end
 
 

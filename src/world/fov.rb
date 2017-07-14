@@ -34,12 +34,24 @@ module Fov
   end
 
 
-  def self.at x, y
+  def self.at x, y = nil
+    return at_vector x if y.nil?
+
     if x < 0 or x > @width - 1 or
        y < 0 or y > @height - 1
       :none
     else
       @map[x][y]
+    end
+  end
+
+
+  internal def self.at_vector v
+    if v.x < 0 or v.x > @width - 1 or
+       v.y < 0 or v.y > @height - 1
+      :none
+    else
+      @map[v.x][v.y]
     end
   end
 

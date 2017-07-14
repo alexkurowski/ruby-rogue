@@ -53,8 +53,8 @@ module World
 
 
   def self.update
-    @active_systems.each do |system_name|
-      system_name.send :run
+    @active_systems.each do |system|
+      system.run
     end
   end
 
@@ -118,7 +118,7 @@ module World
     ).reverse_each do |entity|
       if entity_is_on_screen? entity
 
-        fov = Fov.at entity.position.x, entity.position.y
+        fov = Fov.at entity.position
 
         next unless fov == :full or
                     entity.player?
@@ -151,9 +151,7 @@ module World
 
     entity = @player
 
-    if entity.player.mode == :fire
-      draw_line_of_fire entity
-    end
+    draw_line_of_fire entity
 
     if entity.player.mode == :fire or
        entity.player.mode == :examine
@@ -163,18 +161,25 @@ module World
 
     if Game.debug
       Terminal.print 0, 0, "Player: #{entity.position.x}:#{entity.position.y}"
-      Terminal.print 0, 1, "Cursor: #{Input.mouse_x + Camera.x}:#{Input.mouse_y + Camera.y}"
+      Terminal.print 0, 1, "Cursor: #{Input.cursor.x}:#{Input.cursor.y}"
     end
   end
 
 
   internal def self.draw_line_of_fire entity
+    target = if entity.player.mode == :fire
+             then entity.player.cursor
+             else Input.cursor
+             end
+
+    return if Fov.at(target) != :full
+
     line = Los.line_of_fire(
       from: entity.position,
-      to: entity.player.cursor,
+      to: target,
       radius: entity.creature.sight
     ).reject do |point|
-      Fov.at(point.x, point.y) != :full ||
+      Fov.at(point) != :full ||
       point.x == entity.position.x &&
       point.y == entity.position.y
     end.map do |point|
@@ -199,8 +204,8 @@ module World
 
 
   internal def self.draw_mouse_cursor
-    x     = Input.mouse_x
-    y     = Input.mouse_y
+    x     = Input.mouse.x
+    y     = Input.mouse.y
     char  = '¿'.ord
     color = Terminal.color_from_name 'white'
 

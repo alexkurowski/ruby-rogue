@@ -87,8 +87,8 @@ module System::PcActions
 
   def self.mouse_fire entity
     if entity.player.mode == :normal
-      entity.player.cursor.x = Input.mouse_x + Camera.x
-      entity.player.cursor.y = Input.mouse_y + Camera.y
+      entity.player.cursor.x = Input.cursor.x
+      entity.player.cursor.y = Input.cursor.y
       shoot entity
     end
   end

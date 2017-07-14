@@ -4,21 +4,25 @@ module Input
 
 
   global :action,
-         :mouse_x,
-         :mouse_y,
+         :mouse,
+         :cursor,
          :quit
 
 
   def self.init
-    @delay = 0
+    @mouse  = Vector.new
+    @cursor = Vector.new
+    @delay  = 0
   end
 
 
   def self.read
     @action = nil
 
-    @mouse_x = Terminal.state TK_MOUSE_X
-    @mouse_y = Terminal.state TK_MOUSE_Y
+    @mouse.x  = Terminal.state TK_MOUSE_X
+    @mouse.y  = Terminal.state TK_MOUSE_Y
+    @cursor.x = @mouse.x + Camera.x
+    @cursor.y = @mouse.y + Camera.y
 
     return unless Terminal.has_input?
 

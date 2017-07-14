@@ -1,4 +1,5 @@
 module System::PcActions
+
   def self.run
     return unless Input.action
     return unless World.turn == :player
@@ -34,15 +35,8 @@ module System::PcActions
 
 
   def self.move_entity entity, dx, dy
-    if can_move? entity, dx, dy
-      entity.position.x += dx
-      entity.position.y += dy
-
-      entity.sprite.offset.x -= Display.cell_width  * dx
-      entity.sprite.offset.y -= Display.cell_height * dy
-
-      end_turn 1
-    end
+    moved = System::Movement.move entity, dx, dy
+    end_turn 1 if moved
   end
 
 
@@ -152,4 +146,5 @@ module System::PcActions
     Input.disable_for input_delay
     Camera.set_dirty
   end
+
 end

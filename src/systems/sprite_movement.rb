@@ -1,4 +1,5 @@
 module System::SpriteMovement
+
   def self.run
     entities = Entities.filter_by_component :sprite
 
@@ -33,4 +34,5 @@ module System::SpriteMovement
     else 0.9
     end
   end
+
 end

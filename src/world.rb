@@ -20,7 +20,7 @@ module World
 
     @active_systems = [
       System::PcActions,
-      System::NpcActions,
+      System::AI,
       System::SpriteMovement
     ]
   end

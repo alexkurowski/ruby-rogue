@@ -78,7 +78,6 @@ module Entities
     return find_at_vector x if y.nil?
 
     @entity_list.find do |e|
-      next unless e.include? :position
       return e if e.position.x == x and e.position.y == y
     end
     nil
@@ -87,10 +86,25 @@ module Entities
 
   def self.find_at_vector v
     @entity_list.find do |e|
-      next unless e.include? :position
       return e if e.position.x == v.x and e.position.y == v.y
     end
     nil
+  end
+
+
+  def self.filter_at x, y = nil
+    return filter_at_vector x if y.nil?
+
+    @entity_list.select do |e|
+      e.position.x == x and e.position.y == y
+    end
+  end
+
+
+  def self.filter_at_vector v
+    @entity_list.select do |e|
+      e.position.x == v.x and e.position.y == v.y
+    end
   end
 
 

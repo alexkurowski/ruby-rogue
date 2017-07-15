@@ -26,8 +26,12 @@ module Map
   def self.set_status x, y, status
     return if out_of_bounds? x, y
 
-    type = @tiles[x][y].to_s[@tiles[x][y].to_s.index('_')..-1]
-    @tiles[x][y] = "#{status}#{type}".to_sym
+    s = @tiles[x][y].to_s
+    i = s.index('_') + 1
+    j = s.rindex('_')
+    type = @tiles[x][y].to_s[i...j]
+
+    set_tile x, y, type, status
   end
 
 

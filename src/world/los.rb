@@ -251,8 +251,7 @@ module Los
       if blocked? point.x, point.y, false
         return nil, i
       else
-        entity = Entities.find_at point
-        unless entity.nil?
+        Entities.filter_at(point).each do |entity|
           next if entity.position == @origin_position or
                   not entity.physical&.blocking
           return entity, i

@@ -1,14 +1,13 @@
 module Log
 
   def self.init
-    @log = ['', '', '']
-    @max = 100
+    @log = Array.new 100 { '' }
   end
 
 
   def self.add message
     @log.push message
-    @log.shift if @log.count > @max
+    @log.shift
   end
 
 

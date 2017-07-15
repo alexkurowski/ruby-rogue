@@ -32,7 +32,8 @@ module Display
     @layers = {
       tiles:    0,
       entities: 1,
-      ui:       2
+      ui_bg:    2,
+      ui:       3
     }
 
     Terminal.open
@@ -97,12 +98,42 @@ module Display
   end
 
 
-  def self.print_log x, y, string, color = '#ffffffff'
+  def self.print_log_lines strings, x, y, width: @width, height: @height, direction: :down
+    lines = []
+    max_line_width = width * @cell_width / @log_width
+
+    strings.each do |str|
+      if str.length > max_line_width
+        str.chars.each_slice max_line_width do |part|
+          lines << part.join
+        end
+      else
+        lines << str
+      end
+    end
+
+    if direction == :up
+      y = y - lines.count + 1
+    end
+
+    lines.each_with_index do |line, i|
+      print_log line, x, y + i, width
+    end
+  end
+
+
+  def self.print_log string, x, y, w = @width
     diff_x = -(@cell_width - @log_width)
     diff_y = (@cell_height - @log_height) / 2
     offset = 0
 
-    string.chars.each_slice @width do |chars|
+    bg_char = '█' # '▓'
+    cell_length = string.length * @log_width / @cell_width + 1
+    Terminal.layer @layers.ui_bg
+    Display.print_at x, y, "[color=#{ @background }]#{ bg_char * cell_length }"
+    Terminal.layer @layers.ui
+
+    string.chars.each_slice(w - x) do |chars|
 
       log = ''
       i = 0
@@ -112,7 +143,7 @@ module Display
       end
       offset += @log_width * i
 
-      Display.print_at x, y, "[font=log][color=#{ color }]#{ log }[/font]"
+      Display.print_at x, y, "[font=log]#{ log }[/font]"
 
     end
   end

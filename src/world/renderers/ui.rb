@@ -19,8 +19,8 @@ module Renderer::UI
     draw_log
 
     if Game.debug
-      Display.print_log 0, 0, "Player: #{entity.position.x}:#{entity.position.y}"
-      Display.print_log 0, 1, "Cursor: #{Input.cursor.x}:#{Input.cursor.y}"
+      Display.print_log "Player: #{entity.position.x}:#{entity.position.y}", 0, 0
+      Display.print_log "Cursor: #{Input.cursor.x}:#{Input.cursor.y}", 0, 1
     end
   end
 
@@ -82,14 +82,9 @@ module Renderer::UI
 
 
   internal def self.draw_log
-    count = 4
+    count = 5
     lines = Log.last count
-
-    colors = ['#70ffffff', '#a0ffffff', '#d0ffffff', '#f0ffffff']
-
-    lines.each_with_index do |line, i|
-      Display.print_log 0, Display.height - count + i, line, colors[i]
-    end
+    Display.print_log_lines lines, 0, Display.height - 1, direction: :up
   end
 
 

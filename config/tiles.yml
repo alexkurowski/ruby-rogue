@@ -119,3 +119,17 @@ tile_types:
   wall_wne:
     char: '╩'
     color: *wall_colors
+
+
+tile_statuses:
+  normal:
+
+  bloody:
+    color:
+      -  44  11  11
+      -  40   8   8
+      -  36   6   4
+      -  32   4   4
+
+  fake:
+    can: walk fly

@@ -39,8 +39,6 @@ module System::PlayerActions
   internal def self.move_entity entity, dx, dy
     moved = System::Movement.move entity, dx, dy
     end_turn 1 if moved
-
-    Log.add "You move #{dx}:#{dy}"
   end
 
 
@@ -94,6 +92,8 @@ module System::PlayerActions
   internal def self.shoot entity
     return if entity.player.cursor.x == entity.position.x and
               entity.player.cursor.y == entity.position.y
+
+    Log.add "You shoot with your gun,"
 
     System::Combat.shoot_at entity, entity.player.cursor
     end_turn 1

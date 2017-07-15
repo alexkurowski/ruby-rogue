@@ -1,13 +1,22 @@
 module Log
 
   def self.init
-    @log = Array.new 100 { '' }
+    @log  = Array.new 100 { '' }
+    @last = ''
   end
 
 
   def self.add message
-    @log.push message
+    @last << message << ' '
+  end
+
+
+  def self.submit
+    return if @last == ''
+
     @log.shift
+    @log.push @last
+    @last = ''
   end
 
 

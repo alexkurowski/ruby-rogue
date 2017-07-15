@@ -4,6 +4,7 @@ module Renderer::UI
     Display.clear_ui
     Display.composition true
 
+    Log.submit
     @cursor_hidden = false if @cursor_hidden and Input.mouse_moved?
   end
 

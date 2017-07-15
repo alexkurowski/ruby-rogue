@@ -50,6 +50,7 @@ module System::AI::Mutant
 
 
   internal def self.attack entity, player
+    Log.add "Mutant tries to bite you."
     System::Combat.kick entity, player
   end
 

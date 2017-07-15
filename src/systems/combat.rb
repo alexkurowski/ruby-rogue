@@ -25,6 +25,8 @@ module System::Combat
       x2 = line.last.x
       y2 = line.last.y
 
+      Log.add "but hit nothing."
+
       puts "No mojo. Create a bullet from #{x1}:#{y1} to #{x2}:#{y2}"
     else
       x1 = line.first.x
@@ -34,6 +36,8 @@ module System::Combat
 
       direct = line.first.x == entity.position.x &&
                line.first.y == entity.position.y
+
+      Log.add "and you hit a #{ target.npc.ai.to_s.capitalize }#{ direct ? '!' : '.' }"
 
       deal_damage entity, target
 
@@ -72,8 +76,13 @@ module System::Combat
     if target.player?
       target.creature.dead = true
       target.sprite.color  = '#ffaa0000'
+
+      Log.add "You die..."
     else
-      Entities.destroy target
+
+      Entities.remove target
+
+      Log.add "#{ target.npc.ai.to_s.capitalize } dies."
     end
   end
 

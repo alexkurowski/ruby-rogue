@@ -130,7 +130,7 @@ module Entities
   end
 
 
-  def self.destroy entity
+  def self.remove entity
     @entity_list.delete entity
   end
 

@@ -2,11 +2,15 @@ module Renderer::UI
 
   def self.before
     Display.clear_ui
+
+    @cursor_hidden = false if @cursor_hidden and Input.mouse_moved?
   end
 
 
   def self.render
     entity = World.player
+
+    @cursor_hidden = true if Input.disabled?
 
     draw_line_of_fire entity
     draw_cursor entity
@@ -20,7 +24,15 @@ module Renderer::UI
 
   internal def self.draw_line_of_fire entity
     return if World.turn != :player
-    return if entity.sprite.offset.length.abs > 0.1
+
+    return if entity.sprite.offset.x != 0 or
+              entity.sprite.offset.y != 0
+
+    return if @cursor_hidden and
+              entity.player.mode != :fire
+
+    return if entity.player.mode != :normal and
+              entity.player.mode != :fire
 
     target = if entity.player.mode == :fire
              then entity.player.cursor
@@ -42,7 +54,11 @@ module Renderer::UI
     end
 
     char  = '¿'.ord
-    color = '#aaff0000'
+
+    color = if entity.player.mode == :fire
+            then '#aaaa0000'
+            else '#aa00aa00'
+            end
 
     Display.draw_set line, char, color
   end

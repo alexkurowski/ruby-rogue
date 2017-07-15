@@ -10,17 +10,25 @@ module Input
 
 
   def self.init
-    @mouse  = Vector.new
-    @cursor = Vector.new
-    @delay  = 0
+    @mouse       = Vector.new
+    @mouse_moved = false
+    @cursor      = Vector.new
+    @delay       = 0
   end
 
 
   def self.read
     @action = nil
 
-    @mouse.x  = Terminal.state TK_MOUSE_X
-    @mouse.y  = Terminal.state TK_MOUSE_Y
+    old_mouse_x = @mouse.x
+    old_mouse_y = @mouse.y
+
+    @mouse.x = Terminal.state TK_MOUSE_X
+    @mouse.y = Terminal.state TK_MOUSE_Y
+
+    @mouse_moved = @mouse.x != old_mouse_x ||
+                   @mouse.y != old_mouse_y
+
     @cursor.x = @mouse.x + Camera.position.x
     @cursor.y = @mouse.y + Camera.position.y
 
@@ -46,10 +54,18 @@ module Input
   def self.enable;  @disabled = false end
   def self.disable; @disabled = true end
 
+  def self.enabled?;  @disabled == false end
+  def self.disabled?; @disabled == true end
+
 
   def self.disable_for delay
     @delay = delay
     disable
+  end
+
+
+  def self.mouse_moved?
+    @mouse_moved
   end
 
 

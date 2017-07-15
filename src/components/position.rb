@@ -1,7 +1,6 @@
 Component.new :position,
   x: 0,
-  y: 0,
-  blocking: true
+  y: 0
 
 
 class Component::Position

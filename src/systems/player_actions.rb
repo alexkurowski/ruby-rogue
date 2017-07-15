@@ -1,4 +1,4 @@
-module System::PcActions
+module System::PlayerActions
 
   def self.run
     entity = World.player

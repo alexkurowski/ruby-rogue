@@ -14,7 +14,7 @@ module System::AI::Mutant
     if entity.npc.hostile
       follow entity, player
     else
-      wander entity, player
+      wander entity
     end
   end
 
@@ -38,7 +38,7 @@ module System::AI::Mutant
   end
 
 
-  internal def self.wander entity, player
+  internal def self.wander entity
     return if rand < 0.5
 
     dx = random -1, 2

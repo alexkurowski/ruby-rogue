@@ -100,6 +100,9 @@ module Display
 
 
   def self.put_ext char, color, position, offset
+    if char.chr == '@'
+      p offset
+    end
     Terminal.color color
     Terminal.put_ext position.x, position.y, offset.x, offset.y, char
   end

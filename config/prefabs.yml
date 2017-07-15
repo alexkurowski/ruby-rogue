@@ -9,6 +9,7 @@ entity_prefabs:
     sprite:
       char: '@'
       color: '#ffffffff'
+    physical:
     creature:
       sight: 20
 
@@ -19,5 +20,6 @@ entity_prefabs:
     sprite:
       char: 'M'
       color: '#ffff8888'
+    physical:
     creature:
       sight: 16

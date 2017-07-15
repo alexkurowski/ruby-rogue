@@ -20,8 +20,8 @@ module Camera
     @target.x = entity.position.x - Display.width  * 0.5 + 1
     @target.y = entity.position.y - Display.height * 0.5 + 1
 
-    old_offset_x = @coords.x
-    old_offset_y = @offset.y
+    old_coords_x = @coords.x
+    old_coords_y = @coords.y
 
     @coords.x += (@target.x - @coords.x) * drag
     @coords.y += (@target.y - @coords.y) * drag
@@ -30,8 +30,8 @@ module Camera
     @coords.y = @target.y if ( @target.y - @coords.y ).abs <= min_difference
 
     @dirty = @force_dirty ||
-             @coords.x != old_offset_x ||
-             @coords.y != old_offset_y
+             @coords.x != old_coords_x ||
+             @coords.y != old_coords_y
     @force_dirty = false
 
     @position.x = @target.x.floor

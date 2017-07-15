@@ -16,10 +16,14 @@ module System::Movement
 
 
   def self.can_move? entity, dx, dy
-    e = Entities.find_at(entity.position.x + dx, entity.position.y + dy)
+    x = entity.position.x + dx
+    y = entity.position.y + dy
 
-    Map.can_walk?(entity.position.x + dx, entity.position.y + dy) &&
-    ( e.nil? || !e.position.blocking )
+    return false unless Map.can_walk? x, y
+
+    e = Entities.find_at x, y
+
+    return e.nil? || !e.physical&.blocking
   end
 
 end

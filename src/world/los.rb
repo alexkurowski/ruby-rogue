@@ -254,7 +254,7 @@ module Los
         entity = Entities.find_at point
         unless entity.nil?
           next if entity.position == @origin_position or
-                  not entity.position.blocking
+                  not entity.physical&.blocking
           return entity, i
         end
       end

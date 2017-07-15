@@ -19,6 +19,9 @@ module Renderer::UI
 
 
   internal def self.draw_line_of_fire entity
+    return if World.turn != :player
+    return if entity.sprite.offset.length.abs > 0.1
+
     target = if entity.player.mode == :fire
              then entity.player.cursor
              else Input.cursor

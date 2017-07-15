@@ -179,7 +179,10 @@ module Component
 
       define_method :initialize do
         values.each do |key, value|
-          send "#{key}=", value
+          if value.is_a? Proc
+          then send "#{key}=", value.call
+          else send "#{key}=", value
+          end
         end
       end
     end

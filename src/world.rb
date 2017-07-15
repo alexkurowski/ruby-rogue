@@ -19,7 +19,7 @@ module World
     @turn = :player
 
     @active_systems = [
-      System::PcActions,
+      System::PlayerActions,
       System::AI,
       System::SpriteMovement
     ]

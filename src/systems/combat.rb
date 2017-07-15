@@ -57,8 +57,8 @@ module System::Combat
     dx = entity.position.x - target.position.x
     dy = entity.position.y - target.position.y
     distance = Math.sqrt dx * dx + dy * dy
-    dx = (dx / distance).round
-    dy = (dy / distance).round
+    dx = (dx / distance).round * 2
+    dy = (dy / distance).round * 2
 
     if Map.can_walk? target.position.x - dx, target.position.y - dy
       target.position.x -= dx
@@ -67,22 +67,18 @@ module System::Combat
       target.sprite.offset.y += Display.cell_height * dy
     end
 
-    create_bloodstain target
+    create_bloodstain target.position
 
-    target.creature.dead = true
-    target.sprite.color = "#80#{target.sprite.color[3..-1]}"
-    target.physical.blocking = false if target.physical?
-
-    Entities.send_back target
+    Entities.destroy target
   end
 
 
-  internal def self.create_bloodstain entity
+  internal def self.create_bloodstain position
     for x in -1..1
       for y in -1..1
         if rand < 0.4
 
-          Map.set_status entity.position.x + x, entity.position.y + y, :bloody
+          Map.set_status position.x + x, position.y + y, :bloody
 
         end
       end

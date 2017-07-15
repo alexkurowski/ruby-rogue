@@ -84,7 +84,7 @@ module Entities
   end
 
 
-  def self.find_at_vector v
+  internal def self.find_at_vector v
     @entity_list.find do |e|
       return e if e.position.x == v.x and e.position.y == v.y
     end
@@ -101,7 +101,7 @@ module Entities
   end
 
 
-  def self.filter_at_vector v
+  internal def self.filter_at_vector v
     @entity_list.select do |e|
       e.position.x == v.x and e.position.y == v.y
     end
@@ -127,6 +127,11 @@ module Entities
   def self.send_back entity
     @entity_list.delete entity
     @entity_list.unshift entity
+  end
+
+
+  def self.destroy entity
+    @entity_list.delete entity
   end
 
 

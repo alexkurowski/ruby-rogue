@@ -6,7 +6,9 @@ module Display
   global :width,
          :height,
          :cell_width,
-         :cell_height
+         :cell_height,
+         :log_width,
+         :log_height
 
 
   def self.open
@@ -15,15 +17,17 @@ module Display
     @width  = opts.width
     @height = opts.height
 
-    @title         = opts.title
-    @mode          = opts.mode
-    @tile_name     = opts.tile_name
-    @tile_size     = opts.tile_size
-    @font_name     = opts.font_name
-    @font_size     = opts.font_size
-    @min_font_size = opts.min_font_size
-    @max_font_size = opts.max_font_size
-    @background    = Terminal.color_from_argb 255, 6, 8, 14
+    title       = opts.title
+    tile_name   = opts.tile_name
+    tile_size   = opts.tile_size
+    log_name    = opts.log_name
+    log_size    = opts.log_size
+    @background = Terminal.color_from_argb 255, 6, 8, 14
+
+    @cell_width  = tile_size.split('x').map(&:to_i).first
+    @cell_height = tile_size.split('x').map(&:to_i).last
+    @log_width   = log_size.split('x').map(&:to_i).first
+    @log_height  = log_size.split('x').map(&:to_i).last
 
     @layers = {
       tiles:    0,
@@ -35,13 +39,16 @@ module Display
 
     Terminal.set """
     window: size=#{ @width }x#{ @height },
-            title='#{ @title }',
+            title='#{ title }',
             resizeable=true;
 
     input: filter=[keyboard, mouse, properties];
+
+    font: #{ ROOT }/assets/tiles/#{ tile_name }.png, size=#{ tile_size }, codepage=437;
+    log font: #{ ROOT }/assets/tiles/#{ log_name }.png, size=#{ log_size }, codepage=437;
     """
 
-    update_font_size @font_size
+    Camera.set_dirty
 
     Terminal.refresh
   end
@@ -85,6 +92,32 @@ module Display
   end
 
 
+  def self.print_at x, y, string
+    Terminal.print x, y, string
+  end
+
+
+  def self.print_log x, y, string, color = '#ffffffff'
+    diff_x = -(@cell_width - @log_width)
+    diff_y = (@cell_height - @log_height) / 2
+    offset = 0
+
+    string.chars.each_slice @width do |chars|
+
+      log = ''
+      i = 0
+      chars.each do |ch|
+        log << "[offset=#{ diff_x * i + offset },#{ diff_y }]" << ch
+        i += 1
+      end
+      offset += @log_width * i
+
+      Display.print_at x, y, "[font=log][color=#{ color }]#{ log }[/font]"
+
+    end
+  end
+
+
   def self.draw char, color, position, offset = nil
     if offset.nil?
     then put char, color, position
@@ -120,17 +153,8 @@ module Display
   end
 
 
-  def self.increase_font_size
-    if @font_size < @max_font_size
-      update_font_size @font_size + 1
-    end
-  end
-
-
-  def self.decrease_font_size
-    if @font_size > @min_font_size
-      update_font_size @font_size - 1
-    end
+  def self.composition val = false
+    Terminal.composition val ? TK_ON : TK_OFF
   end
 
 
@@ -142,22 +166,6 @@ module Display
 
   def self.big?
     width * height > 5000
-  end
-
-
-  internal def self.update_font_size val
-    @font_size = val
-
-    if @mode == 'font'
-      Terminal.set "font: #{ ROOT }/assets/fonts/#{ @font_name }.ttf, size=#{ @font_size }"
-    else
-      Terminal.set "font: #{ ROOT }/assets/tiles/#{ @tile_name }.png, size=#{ @tile_size }x#{ @tile_size }, codepage=437"
-    end
-
-    Camera.set_dirty
-
-    @cell_width  = Terminal.state TK_CELL_WIDTH
-    @cell_height = Terminal.state TK_CELL_HEIGHT
   end
 
 end

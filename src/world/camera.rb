@@ -8,8 +8,10 @@ module Camera
     @position = Vector.new
     @offset   = Vector.new
 
-    @coords = Vector.new
-    @target = Vector.new
+    @coords        = Vector.new
+    @target        = Vector.new
+    @target_offset = Vector.new 1, 1
+
     @dirty  = true
   end
 
@@ -17,8 +19,8 @@ module Camera
   def self.update
     entity = World.player
 
-    @target.x = entity.position.x - Display.width  * 0.5 + 1
-    @target.y = entity.position.y - Display.height * 0.5 + 1
+    @target.x = entity.position.x - Display.width  * 0.5 + @target_offset.x
+    @target.y = entity.position.y - Display.height * 0.5 + @target_offset.y
 
     old_coords_x = @coords.x
     old_coords_y = @coords.y
@@ -42,8 +44,8 @@ module Camera
 
 
   def self.jump_to x, y
-    @coords.x = @target.x = x - Display.width  * 0.5 + 1
-    @coords.y = @target.y = y - Display.height * 0.5 + 1
+    @coords.x = @target.x = x - Display.width  * 0.5 + @target_offset.x
+    @coords.y = @target.y = y - Display.height * 0.5 + @target_offset.y
   end
 
 

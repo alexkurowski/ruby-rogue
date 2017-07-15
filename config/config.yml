@@ -2,13 +2,10 @@ terminal_options:
   width: 80
   height: 40
   title: roguelike
-  mode: tiles
   tile_name: tileset13
-  tile_size: 13
-  font_name: teko
-  font_size: 12
-  min_font_size: 8
-  max_font_size: 18
+  tile_size: 13x13
+  log_name: tileset8x12
+  log_size: 8x12
 
 
 map_options:

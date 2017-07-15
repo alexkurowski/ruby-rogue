@@ -69,7 +69,12 @@ module System::Combat
 
     create_bloodstain target.position
 
-    Entities.destroy target
+    if target.player?
+      target.creature.dead = true
+      target.sprite.color  = '#ffaa0000'
+    else
+      Entities.destroy target
+    end
   end
 
 

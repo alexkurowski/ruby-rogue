@@ -79,12 +79,6 @@ module Input
     when TK_CLOSE
       @quit = true
 
-    when TK_KP_MINUS
-      Display.decrease_font_size
-
-    when TK_KP_PLUS
-      Display.increase_font_size
-
     when TK_RESIZED
       width  = Terminal.state TK_WIDTH
       height = Terminal.state TK_HEIGHT

@@ -39,6 +39,8 @@ module System::PlayerActions
   internal def self.move_entity entity, dx, dy
     moved = System::Movement.move entity, dx, dy
     end_turn 1 if moved
+
+    Log.add "You move #{dx}:#{dy}"
   end
 
 

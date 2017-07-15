@@ -12,6 +12,7 @@ module World
     Camera.init
     Fov.init
     Los.init
+    Log.init
 
     place_player
     place_npc
@@ -37,6 +38,8 @@ module World
 
       Camera.jump_to entity.position.x, entity.position.y - 10
     end
+
+    Log.add "Welcome! This is a very long line, you might not see it complete, but that's okay. This is only a test logging message."
   end
 
 

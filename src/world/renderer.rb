@@ -18,6 +18,7 @@ module Renderer
   def self.render_ui
     UI.before
     UI.render
+    UI.after
   end
 
 end

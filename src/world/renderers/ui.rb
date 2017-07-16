@@ -60,11 +60,11 @@ module Renderer::UI
       point - Camera.position
     end
 
-    char  = '¿'.ord
+    char  = '₧'.ord
 
     color = if entity.player.mode == :fire
-            then '#aaaa0000'
-            else '#aa00aa00'
+            then '#66aa0000'
+            else '#6600aa00'
             end
 
     Display.draw_set line, char, color

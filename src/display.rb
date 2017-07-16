@@ -116,6 +116,7 @@ module Display
       y = y - lines.count + 1
     end
 
+    Terminal.color '#ffffffff'
     lines.each_with_index do |line, i|
       print_log line, x, y + i, width
     end

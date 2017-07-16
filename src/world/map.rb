@@ -16,6 +16,15 @@ module Map
   end
 
 
+  def self.get_tile x, y
+    tile   = @tiles[x][y].to_s.split '_'
+    type   = tile[1]
+    status = tile[0]
+
+    return type, status
+  end
+
+
   def self.set_tile x, y, type, status = :normal
     type = "#{status}_#{type}".to_sym
     variant = @types[type].sample

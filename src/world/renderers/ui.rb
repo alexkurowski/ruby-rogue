@@ -15,13 +15,16 @@ module Renderer::UI
     @cursor_hidden = true if Input.disabled?
 
     draw_line_of_fire entity
+    draw_examine entity
     draw_cursor entity
 
     draw_log
 
     if Game.debug
-      Display.print_log "Player: #{entity.position.x}:#{entity.position.y}", 0, 0
-      Display.print_log "Cursor: #{Input.cursor.x}:#{Input.cursor.y}", 0, 1
+      str1 = "Player: #{entity.position.x}:#{entity.position.y}"
+      str2 = "Cursor: #{Input.cursor.x}:#{Input.cursor.y}"
+      Display.print_log str1, Display.width - str1.length, 0
+      Display.print_log str2, Display.width - str2.length, 1
     end
   end
 
@@ -86,6 +89,38 @@ module Renderer::UI
     count = 5
     lines = Log.last count
     Display.print_log_lines lines, 0, Display.height - 1, direction: :up
+  end
+
+
+  internal def self.draw_examine entity
+    target =
+    if entity.player.mode == :examine
+    then entity.player.cursor
+    else Input.mouse + Camera.position
+    end
+
+    return unless Fov.at(target) == :full
+
+    lines = []
+
+    Entities.filter_at(target).each do |entity|
+      if entity.player?
+        lines << 'Yourself'
+      elsif entity.npc?
+        lines << entity.npc.ai.to_s.capitalize
+      end
+    end
+
+    tile_type, tile_status = Map.get_tile target.x, target.y
+
+    lines <<
+    if tile_status == 'normal'
+    then tile_type
+    else tile_status + ' ' + tile_type
+    end.capitalize
+
+    lines = "You see: #{lines.join ', '}"
+    Display.print_log_lines [lines], 0, 0
   end
 
 
